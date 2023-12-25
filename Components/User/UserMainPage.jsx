@@ -1,59 +1,59 @@
 //import liraries
 import React, { Component } from 'react';
-import { View,SafeAreaView, TextInput, Text, StyleSheet, ScrollView, Touchable, TouchableOpacity } from 'react-native';
+import { View,SafeAreaView, TextInput, Text, StyleSheet, ScrollView, Touchable, TouchableOpacity, FlatList } from 'react-native';
 
 // create a component
 class UserMainPage extends Component {
     myCommunities = [
         {
             id : 1 ,
+            name : 'The cat coffee',
+            imageUrl : '../assets/images/cats.jpeg',
+            grade : 4.5
+        },
+        {
+            id : 2 ,
             name : 'Cow-boys',
             imageUrl : '../assets/images/',
             grade : 3.5
         },
         {
-            id : 1 ,
-            name : '',
-            imageUrl : '',
-            grade :
+            id : 3 ,
+            name : 'Basketeers',
+            imageUrl : '../assets/images/',
+            grade : 4
         },
         {
-            id : 1 ,
-            name : '',
-            imageUrl : '',
-            grade :
-        },
-        {
-            id : 1 ,
-            name : '',
-            imageUrl : '',
-            grade :
+            id : 4 ,
+            name : 'Momies for babies',
+            imageUrl : '../assets/images/',
+            grade : 3.2
         },
     ];
     nearestCommunities = [
         {
-            id : 1 ,
-            name : '',
-            imageUrl : '',
-            grade :
+            id : 5 ,
+            name : 'Cookings tips',
+            imageUrl : '../assets/images/',
+            grade : 4.1
         },
         {
-            id : 1 ,
-            name : '',
-            imageUrl : '',
-            grade :
+            id : 6 ,
+            name : 'Animes lovers',
+            imageUrl : '../assets/images',
+            grade : 4.8
         },
         {
-            id : 1 ,
-            name : '',
-            imageUrl : '',
-            grade :
+            id : 7 ,
+            name : 'La taverne',
+            imageUrl : '../assets/images',
+            grade : 5
         },
         {
-            id : 1 ,
-            name : '',
-            imageUrl : '',
-            grade :
+            id : 8 ,
+            name : 'Les voleurs associés',
+            imageUrl : '../assets/images',
+            grade : 2
         },
     ];
     render() {
@@ -73,6 +73,28 @@ class UserMainPage extends Component {
                     </ScrollView>
                 </View>
                 <Text style = {styles.titleStyle}>My communities</Text>
+                <View style = {styles.myCommunitiesStyle} >
+                    <FlatList
+                    data = {this.myCommunities}
+                    horizontal = {true}
+                    keyExtractor = {(item)=> item.id}
+                    renderItem = {(item)=> {
+                        <View style = {styles.myCommunitiesViews}>
+                            
+                        </View>
+                    }}
+                    />
+                </View>
+                <Text style = {styles.titleStyle}>Nearest communities</Text>
+                <View style = {styles.nearestCommunitiesStyle} >
+                    <FlatList
+                    horizontal = {true}
+                    keyExtractor = {(item)=> item.id}
+                    renderItem = {(item)=> {
+                        
+                    }}
+                    />
+                </View>
             </SafeAreaView>
         );
     }
