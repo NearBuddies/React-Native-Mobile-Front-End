@@ -6,8 +6,8 @@ const GOOGLE_MAPS_APIKEY = "AIzaSyBz6vgE5rU0u6-Mi5R5hTwW9L93m_fCSYE";
 const MyTheme = {
     dark: false,
     colors: {
-      primary: 'rgb(255, 45, 85)', 
-      background: 'rgb(229, 255, 204)',
+      primary: 'rgb(255, 255, 255)', 
+      background: 'rgb(255, 255, 255)',
       card: 'rgb(255, 255, 255)',
       text: 'rgb(28, 28, 30)',
       border: 'rgb(199, 199, 204)',

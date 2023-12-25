@@ -13,6 +13,9 @@ const CustomAppBar = () => {
 const styles = StyleSheet.create({
     container: {
         height: '5.4%',
+        marginTop : 20,
+        marginLeft : 5,
+        marginBottom : 5,
         width: '37%',
         backgroundColor : '#fff'
     },
