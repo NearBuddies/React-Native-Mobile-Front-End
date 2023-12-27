@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View, TextInput } from 'react-native';
 
 export default function AuthentificationPage() {
     
@@ -19,20 +19,29 @@ export default function AuthentificationPage() {
 const styles = StyleSheet.create({
     parentView : {
         display : "flex",
+        flex: 1,
         flexDirection : "column",
         justifyContent : "center",
         alignItems : "center"
     },
     centralView : {
+        display: "flex",
+        flexDirection: "column",
         height : 500,
-        width : 300,
-        borderRadius : 50, 
-        backgroundColor : ""
+        width : 350,
+        borderRadius: 40, 
+        backgroundColor : "#A6DACD",
     },
     inputView : {
         display : "flex",
         flexDirection: "row",
-        alignItems : "center"
+        alignItems : "center",
+        backgroundColor : "#FFF",
+        marginVertical: 40,
+        marginHorizontal: 20,
+        height:50,
+        width: '90%',
+        borderRadius : 15
     },
     inputPressable : {
 

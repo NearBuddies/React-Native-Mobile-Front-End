@@ -12,6 +12,8 @@ import UserForYou from './Components/User/UserForYou';
 import CustomAppBar from './Components/Common/CustomAppBar';
 import UserNavigation from './Components/User/UserNavigation';
 import Settings from './Components/Common/Settings';
+import AuthentificationPage from './Components/Authentication/AuthentificationPage';
+import InscriptionPage from './Components/Authentication/InscriptionPage';
 
 const Stack = createStackNavigator();
 export default function App() {
@@ -22,7 +24,7 @@ export default function App() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen
           name="Home"
-          component={UserNavigation}
+          component={AuthentificationPage}
           options={{
             tabBarIcon: () => (
               <Image source={require('./assets/icons/house.png')}
