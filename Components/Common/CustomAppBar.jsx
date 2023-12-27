@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 const CustomAppBar = () => {
     return (
         <View style={styles.container}>
-            <Image source={require('../../assets/icons/NearBuddies.jpeg')} style={styles.image} />
+            <Image source={require('../../assets/images/NearBuddies_logo.jpg')} style={styles.image} />
         </View>
     );
 };
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         marginTop : 20,
         marginLeft : 5,
         marginBottom : 5,
-        width: '37%',
+        width: '39 %',
         backgroundColor : '#fff'
     },
     image:{

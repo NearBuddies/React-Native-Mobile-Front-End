@@ -77,10 +77,11 @@ class UserMainPage extends Component {
                     <FlatList
                     data = {this.myCommunities}
                     horizontal = {true}
+                    showsHorizontalScrollIndicator = {false}
                     keyExtractor = {(item)=> item.id}
                     renderItem = {(item)=> {
                         <View style = {styles.myCommunitiesViews}>
-                            
+                            <Text>Ici</Text>
                         </View>
                     }}
                     />
@@ -138,7 +139,17 @@ const styles = StyleSheet.create({
         color : '#D0CCCC',
         marginRight: 20
     },
-    
+    myCommunitiesStyle : {
+        height : 300
+    },
+    myCommunitiesViews : {
+        height : 400,
+        width : 250,
+        backgroundColor : '#EC6A6D'
+    },
+    nearestCommunitiesStyle : {
+        
+    }
 });
 
 //make this component available to the app
