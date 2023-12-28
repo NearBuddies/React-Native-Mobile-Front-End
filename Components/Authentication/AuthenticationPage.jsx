@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View, TextInput, Image } from 'react-native';
 
-export default function InscriptionPage() {
+export default function AuthenticationPage() {
     
     return (
         <View style={styles.parentView}>
@@ -16,7 +16,7 @@ export default function InscriptionPage() {
                 <View style={styles.inputView}>
                     <Pressable style={styles.inputPressable}>
                         <Image
-                        source={require("../../assets/icons/auth/User_alt_light.jpg")}
+                        source={require("")}
                         style = {styles.inputIcons}
                         />
                     </Pressable>

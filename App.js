@@ -1,63 +1,54 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { Button } from 'react-native-paper';
 import { NavigationContainer, DefaultTheme, useLinking } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';  
 import { createStackNavigator } from '@react-navigation/stack';
 import { MyTheme } from './Variables';
-import UserMainPage from './Components/User/UserMainPage';
-import UserExplore from './Components/User/UserExplore';
-import UserForYou from './Components/User/UserForYou';
-import CustomAppBar from './Components/Common/CustomAppBar';
-import UserNavigation from './Components/User/UserNavigation';
-import Settings from './Components/Common/Settings';
-import AuthentificationPage from './Components/Authentication/AuthentificationPage';
+import AuthenticationPage from './Components/Authentication/AuthenticationPage';
 import InscriptionPage from './Components/Authentication/InscriptionPage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createStackNavigator();
 export default function App() {
+  const [userAuthenticated, setUserAuthenticated] = useState(false);
+  const authenticateUser = async () =>{
+    // Get the username and the password
+    const username = AsyncStorage.getItem("username");
+    const password = AsyncStorage.getItem("password");
+    // Send and authentication request using axios
+      // If the user is authenticated
+        //Store his id
+        // return true
+          // he will be directly on user navigation, with his id
+            //Not implemented yet
+      // Else 
+        //return false
+          // he will be directly on authentication navigation
+            // Not implemented yet
+              return false;
+  }
   return (
     <>
-    <CustomAppBar />
     <NavigationContainer theme={MyTheme}>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator 
+      screenOptions={{ headerShown: false }}
+      initialRouteName={
+        async () => {
+          const auth = await authenticateUser();
+          return auth === true ? 'UserNavigation' : 'AuthenticationNavigation';
+        }
+      }
+      >
         <Stack.Screen
-          name="Home"
-          component={AuthentificationPage}
-          options={{
-            tabBarIcon: () => (
-              <Image source={require('./assets/icons/house.png')}
-                style={{ width: 20, height: 20 }} />
-            )
-          }} />
+          name="AuthenticationNavigation"
+          component={AuthenticationPage}
+        />
         <Stack.Screen
-          name="For You"
-          component={UserForYou}
-          options={{
-            tabBarIcon: () => (
-              <Image source={require('./assets/icons/for-you.png')}
-                style={{ width: 20, height: 20 }} />
-            )
-          }} />
-        <Stack.Screen
-          name="Explore"
-          component={UserExplore}
-          options={{
-            tabBarIcon: () => (
-              <Image source={require('./assets/icons/compass.png')}
-                style={{ width: 20, height: 20 }} />
-            )
-          }} />
-        <Stack.Screen
-          name="Settings"
-          component={Settings}
-          options={{
-            tabBarIcon: () => (
-              <Image source={require('./assets/icons/tools.png')}
-                style={{ width: 20, height: 20 }} />
-            )
-          }} />
+          name="UserNavigation"
+          component={InscriptionPage}
+        />
       </Stack.Navigator>
     </NavigationContainer></>
         

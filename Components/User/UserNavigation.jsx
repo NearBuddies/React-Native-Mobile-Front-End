@@ -13,7 +13,7 @@ export default function UserNavigation(){
     const Tab = createBottomTabNavigator();
     return(
         <>
-        <CustomAppBar />
+        <CustomAppBar/>
           <Tab.Navigator screenOptions={{ headerShown: false }}>
             <Tab.Screen
               name="Home"
