@@ -1,59 +1,74 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import { Button } from 'react-native-paper';
-import { NavigationContainer, DefaultTheme, useLinking } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';  
+import React, { useState, useEffect } from 'react';
+import { StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { MyTheme } from './Variables';
-import AuthenticationPage from './Components/Authentication/AuthenticationPage';
-import InscriptionPage from './Components/Authentication/InscriptionPage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AuthenticationNavigation from './Components/Authentication/AuthenticationNavigation';
+import UserNavigation from './Components/User/UserNavigation';
+import UserStack from './Components/User/UserStack';
+
+import { MyTheme } from './Variables';
 
 const Stack = createStackNavigator();
-export default function App() {
+
+const App = () => {
   const [userAuthenticated, setUserAuthenticated] = useState(false);
-  const authenticateUser = async () =>{
-    // Get the username and the password
-    const username = AsyncStorage.getItem("username");
-    const password = AsyncStorage.getItem("password");
-    // Send and authentication request using axios
-      // If the user is authenticated
-        //Store his id
-        // return true
-          // he will be directly on user navigation, with his id
-            //Not implemented yet
-      // Else 
-        //return false
-          // he will be directly on authentication navigation
-            // Not implemented yet
-              return false;
-  }
-  return (
-    <>
-    <NavigationContainer theme={MyTheme}>
-      <Stack.Navigator 
-      screenOptions={{ headerShown: false }}
-      initialRouteName={
-        async () => {
-          const auth = await authenticateUser();
-          return auth === true ? 'UserNavigation' : 'AuthenticationNavigation';
+
+  useEffect(() => {
+    const authenticateUser = async () => {
+      /*
+      try {
+        // Get the username and the password
+        const username = await AsyncStorage.getItem("username");
+        const password = await AsyncStorage.getItem("password");
+
+        // Send an authentication request using axios
+        // If the user is authenticated
+        // Store his id
+        // Set userAuthenticated to true
+        if (/* authentication condition */
+      /*  
+        ) {
+          // Store user id
+          // Set userAuthenticated to true
+      
+      /*    setUserAuthenticated(true);
+        } else {
+          // Set userAuthenticated to false
+          setUserAuthenticated(false);
         }
-      }
-      >
-        <Stack.Screen
-          name="AuthenticationNavigation"
-          component={AuthenticationPage}
-        />
-        <Stack.Screen
-          name="UserNavigation"
-          component={InscriptionPage}
-        />
+      } catch (error) {
+        console.error("Error authenticating user:", error);
+      }*/
+      return true
+    };
+
+    // authenticateUser();
+    setUserAuthenticated(true)
+    // setUserAuthenticated(true)
+  }, []);
+
+  return (
+    <NavigationContainer theme={MyTheme}>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {userAuthenticated ? (
+          <>
+            <Stack.Screen name="UserStack" component={UserStack} />
+            {/* Additional screens for UserNavigation */}
+          </>
+        ) : (
+          <>
+            <Stack.Screen
+              name="AuthenticationNavigation"
+              component={AuthenticationNavigation}
+            />
+            {/* Additional screens for AuthenticationNavigation */}
+          </>
+        )}
       </Stack.Navigator>
-    </NavigationContainer></>
-        
+    </NavigationContainer>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -63,3 +78,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default App ;

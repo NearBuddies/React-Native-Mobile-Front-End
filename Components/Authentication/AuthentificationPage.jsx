@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, View, TextInput, Image, Alert, Touchable }
 import { Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import InscriptionPage from './InscriptionPage';
-export default function Auth({
+export default function AuthentificationPage({
 
 }) {
     const navigation = useNavigation();

@@ -1,9 +1,6 @@
 import React from 'react';
 import { Text, View, Image } from 'react-native';
-import { MyTheme } from '../../Variables';
-import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer, DefaultTheme, useLinking } from '@react-navigation/native';
 import CustomAppBar from '../Common/CustomAppBar';
 import Settings from '../Common/Settings';
 import UserMainPage from './UserMainPage';
