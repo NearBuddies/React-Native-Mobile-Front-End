@@ -16,13 +16,13 @@ const styles = StyleSheet.create({
         marginTop : 20,
         marginLeft : 5,
         marginBottom : 5,
-        width: '39 %',
+        width: '45%',
         backgroundColor : '#fff'
     },
     image:{
         marginLeft: 10,
         marginVertical: 5,
-        width: '95%',
+        width: '100%',
         height: '100%'
     }
 });

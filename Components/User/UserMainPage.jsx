@@ -3,8 +3,11 @@ import React, { useState } from 'react';
 import { View,SafeAreaView, TextInput, Text, StyleSheet, ScrollView, Touchable, TouchableOpacity, FlatList, Image, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import UserCreateCommunity from './UserCreateCommunity';
+import UserSeeCommunityPage from './UserSeeCommunityPage';
 // create a component
 export default function UserMainPage() {
+    // Se mettre une navigation
+    const navigation = useNavigation();
     // Les communautés dans lesquelles je suis
     const [ myCommunities, setMyCommunities] = useState(
         [
@@ -34,15 +37,13 @@ export default function UserMainPage() {
             },
         ]
     ) 
-    // Se mettre une navigation
-    const navigation = useNavigation();
     // Fonction de navigation vers la création de communauté
     const navigateToCreateCommunity = () => {
         navigation.navigate('UserCreateCommunity');
     }
-    // Fonction pour naviguer vers la page de la communauté
-    const navigateToCommunityPage = (communityId) =>{
-
+    // Fonction pour naviguer vers la page pour voir les communautés
+    const navigateToSeeCommunityPage = (id) => {
+        navigation.navigate('UserSeeCommunityPage',id);
     }
     // Les communautés environnantes
     const [ nearestCommunities, setNearestCommunities ] = useState(
@@ -102,7 +103,7 @@ export default function UserMainPage() {
             </View>
             <View style={styles.hearderView}>
                 <Text style = {styles.titleStyle}>My communities</Text>
-                <TouchableOpacity style={styles.createCommunityOpacity} onPress={navigateToCreateCommunity}>
+                <TouchableOpacity style={styles.createCommunityOpacity} onPress={ navigateToCreateCommunity }>
                     <Text style={styles.createCommunityText}>Create</Text>
                 </TouchableOpacity>
             </View>
@@ -138,7 +139,9 @@ export default function UserMainPage() {
                 showsHorizontalScrollIndicator = {false}
                 keyExtractor = {(item)=> item.id}
                 renderItem = {({item})=> (
-                    <TouchableOpacity style = { styles.nearestCommunitiesViewsStyle }>
+                    <TouchableOpacity
+                    style = { styles.nearestCommunitiesViewsStyle }
+                    onPress={ () => navigateToSeeCommunityPage(item.id) }>
                         <Image 
                         source = { typeof item.imageUrl==='string' ? {uri : item.imageUrl} : item.imageUrl }
                         style = {styles.bottomImagesStyle}
@@ -153,7 +156,7 @@ export default function UserMainPage() {
                 source={ typeof nextEvent.imageUrl==='string' ? {uri : nextEvent.imageUrl} : nextEvent.imageUrl }
                 />
                 <View style={styles.nextEventDetailsView}>
-                    <Text>{nextEvent.eventName}</Text>
+                    <Text style={styles.nextEventNameStyle}>{nextEvent.eventName}</Text>
                 </View>
             </TouchableOpacity>
         </SafeAreaView>
@@ -297,6 +300,11 @@ const styles = StyleSheet.create({
         width : 200,
         height : 50,
         backgroundColor : "transparent"        
+    },
+    nextEventNameStyle : {
+        fontSize : 15,
+        fontWeight : 'bold',
+        color : '#fff',
     }
 
 });
