@@ -5,6 +5,7 @@ import UserNavigation from './UserNavigation';
 import UserCreateCommunity from './UserCreateCommunity';
 import UserSeeCommunityPage from './UserSeeCommunityPage';
 import UserCommunityPage from './UserCommunityPage';
+import UserViewCommunityLocation from './UserViewCommunityLocation';
 
 export default function UserStack () {
     const Stack = createStackNavigator();
@@ -14,6 +15,7 @@ export default function UserStack () {
             <Stack.Screen name='UserCreateCommunity' component={UserCreateCommunity}/>
             <Stack.Screen name='UserSeeCommunityPage' component={UserSeeCommunityPage}/>
             <Stack.Screen name='UserCommunityPage' component={UserCommunityPage}/>
+            <Stack.Screen name='UserViewCommunityLocation' component={UserViewCommunityLocation}/>
         </Stack.Navigator>
     )
 }

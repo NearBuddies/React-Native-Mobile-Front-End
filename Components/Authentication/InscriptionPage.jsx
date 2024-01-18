@@ -75,7 +75,7 @@ export default function InscriptionPage({
             <View style={styles.bottomView}>
                 <Text style={styles.haveAccount}>Already have an acount?</Text>
                 <Pressable onPress={()=>{
-                    navigation.navigate('Auth')
+                    navigation.navigate('AuthentificationPage')
                     }}>
                     <Text style={styles.connectAccount}>Connect</Text>
                 </Pressable>

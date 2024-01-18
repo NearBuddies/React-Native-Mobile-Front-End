@@ -24,6 +24,7 @@ export default function UserSeeCommunityPage() {
 🌈🚀 Join AnimeSphere – where every member is part of our anime family! 🌟
 #AnimeSphere #AnimeLove`            
     })
+
     // Fonction pour joindre la communauté
     const joinCommunity = (communityId) => {
         // Prendre mon identifiant
@@ -34,6 +35,12 @@ export default function UserSeeCommunityPage() {
             // Naviguer vers la communauté, nouveau membre
             navigation.navigate('UserCommunityPage');
     }
+
+    // Fonction pour naviguer vers la carte de la communauté
+    const navigateToViewCommunityLocation = () => {
+        navigation.navigate('UserViewCommunityLocation', { communityToSeeMore });
+    }
+
     return (
         <SafeAreaView>
             <CustomAppBar/>
@@ -44,6 +51,7 @@ export default function UserSeeCommunityPage() {
                     source= {communityToSeeMore.imageUrl}
                     />
                 </View>
+
                 <TouchableOpacity style = {styles.nameGradeOpacity}>
                     <Text style={styles.communityNameStyle}>{communityToSeeMore.communityName}</Text>
                     <View style = {styles.gradesView}>
@@ -56,6 +64,13 @@ export default function UserSeeCommunityPage() {
                         <Text style = {styles.numberOfReviewStyle}>{communityToSeeMore.communityGrade} - {communityToSeeMore.communityNumberOfReviews} Reviews</Text>
                     </View>
                 </TouchableOpacity>
+
+                <TouchableOpacity onPress={()=>{navigateToViewCommunityLocation()}}>    
+                        <Text style={styles.ViewOnMapText}>View on map</Text>
+                    </TouchableOpacity>
+
+
+
                 <View style = {styles.descriptionView}>
                     <Text style = {styles.communityDescriptionStyle}>
                         {communityToSeeMore.communityDescription}
@@ -98,6 +113,12 @@ const styles = {
         flexDirection : 'column',
         marginTop : '2%',
         marginLeft : '2.5%'
+    },
+    ViewOnMapText : {
+        color: '#ec6a6d',
+        fontSize: 15,
+        fontWeight: 'bold',
+        fontStyle: 'italic'
     },
     communityNameStyle : {
         fontSize : 20,
