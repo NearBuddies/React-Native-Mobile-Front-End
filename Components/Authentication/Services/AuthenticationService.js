@@ -17,7 +17,13 @@ const authenticate = (username, password) => {
 }
 
 const register = (username, password, email) => {
-    axios.post(`${rootAddress}/`)
+    axios.post(`${rootAddress}/`,
+        {
+            "username" : username,
+            "password" : password,
+            "email" : email
+        }
+    )
     .then((response)=>{
         if(response.data) {
             console.log("Registration returned"+response.data)
