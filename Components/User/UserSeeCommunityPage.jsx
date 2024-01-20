@@ -52,24 +52,28 @@ export default function UserSeeCommunityPage() {
                     />
                 </View>
 
-                <TouchableOpacity style = {styles.nameGradeOpacity}>
-                    <Text style={styles.communityNameStyle}>{communityToSeeMore.communityName}</Text>
-                    <View style = {styles.gradesView}>
-                        <View style = {styles.starView}>
-                            <Image 
-                            source = {require('../../assets/icons/star.jpg')}
-                            style = {styles.starStyle}
-                            />
-                        </View>
-                        <Text style = {styles.numberOfReviewStyle}>{communityToSeeMore.communityGrade} - {communityToSeeMore.communityNumberOfReviews} Reviews</Text>
-                    </View>
-                </TouchableOpacity>
+                <View style={styles.middleView}>
 
-                <TouchableOpacity onPress={()=>{navigateToViewCommunityLocation()}}>    
-                        <Text style={styles.ViewOnMapText}>View on map</Text>
+                    <TouchableOpacity style = {styles.nameGradeOpacity}>
+                        <Text style={styles.communityNameStyle}>{communityToSeeMore.communityName}</Text>
+                        <View style = {styles.gradesView}>
+                            <View style = {styles.starView}>
+                                <Image 
+                                source = {require('../../assets/icons/star.jpg')}
+                                style = {styles.starStyle}
+                                />
+                            </View>
+                            <Text style = {styles.numberOfReviewStyle}>{communityToSeeMore.communityGrade} - {communityToSeeMore.communityNumberOfReviews} Reviews</Text>
+                        </View>
                     </TouchableOpacity>
 
+                    <TouchableOpacity onPress={()=>{navigateToViewCommunityLocation()}}>    
+                            <Text style={styles.ViewOnMapText}>View on map</Text>
+                    </TouchableOpacity>
 
+                </View>
+
+                
 
                 <View style = {styles.descriptionView}>
                     <Text style = {styles.communityDescriptionStyle}>
@@ -118,7 +122,8 @@ const styles = {
         color: '#ec6a6d',
         fontSize: 15,
         fontWeight: 'bold',
-        fontStyle: 'italic'
+        fontStyle: 'italic', 
+        marginLeft: '54%'
     },
     communityNameStyle : {
         fontSize : 20,
@@ -178,5 +183,10 @@ const styles = {
         fontSize : 15,
         fontWeight : 'bold',
         color : '#fff'
+    },
+    middleView : {
+        display : "flex",
+        flexDirection : "row",
+        alignItems : "center"
     }
 }

@@ -3,10 +3,26 @@ import { Pressable, StyleSheet, Text, View, TextInput, Image, Alert, Touchable }
 import { Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import InscriptionPage from './InscriptionPage';
+import { authenticate } from './Services/AuthenticationService';
 export default function AuthentificationPage({
 
 }) {
+    // Definir la navigation
     const navigation = useNavigation();
+
+    // Definir username et password
+    const [username,setUsername] = useState('');
+    const [password,setPassword] = useState('');
+
+    // Definir la fonction utilisée
+    const useAuthenticate = () => {
+        if( authenticate(username,password) ) navigation.navigate('UserStack')
+        else {
+            Alert.alert("Le nom d'utilisateur ou le mot de passe est incorrect");
+            navigation.reset
+        }
+    }
+
     return (
         <View style={styles.parentView}>
             <View style={styles.titlesView}>
@@ -24,7 +40,7 @@ export default function AuthentificationPage({
                         style = {styles.inputIcons}
                         /> 
                     </Pressable>
-                    <TextInput style={styles.inputTextInput} placeholder="Username"/>
+                    <TextInput style={styles.inputTextInput} placeholder="Username" onChangeText={(text)=>setUsername(text)}/>
                 </View> 
                 <View style={styles.inputView}>
                     <Pressable style={styles.inputPressable} >
@@ -33,7 +49,7 @@ export default function AuthentificationPage({
                         style = {styles.inputIcons}
                         />
                     </Pressable>
-                    <TextInput style={styles.inputTextInput} placeholder="Password"/>
+                    <TextInput style={styles.inputTextInput} placeholder="Password" onChangeText={(text)=>setPassword(text)}/>
                     <Pressable style={styles.inputPressableEnd} onPress={()=> Alert.alert("You pressed")}>
                         <Image
                         source={require("../../assets/icons/auth/View_light.jpg")}
@@ -48,7 +64,7 @@ export default function AuthentificationPage({
                 </View>               
             </View>
             
-            <Pressable style={styles.signInPressable} onPress={()=>{Alert.alert("You pressed")}}>
+            <Pressable style={styles.signInPressable} onPress={()=>{ useAuthenticate() }}>
                     <View >
                         <Text style={styles.signInButtonStyle}>Sign in</Text>
                     </View>

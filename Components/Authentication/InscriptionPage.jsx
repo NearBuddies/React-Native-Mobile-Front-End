@@ -1,12 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View, TextInput, Image, Alert, Touchable } from 'react-native';
 import { Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AuthentificationPage from './AuthentificationPage';
+import { register } from './Services/AuthenticationService';
 export default function InscriptionPage({
 
 }) {
+    // Definir la navigation
     const navigation = useNavigation();
+
+    // Definir username, password et email
+    const [username,setUsername] = useState('')
+    const [password,setPassword] = useState('')
+    const [confirmedPassword, setConfirmedPassword] = useState('')
+    const [email, setEmail] = useState('')
+
+    // Definir la fonction utilisée
+    const useRegister = () => {
+        if ( password === confirmedPassword ){
+            if( register(username,password, email) ) navigation.navigate('AuthentificationPage')
+            else {
+                Alert.alert("Une erreur est survenue, veuillez réessayer");
+                navigation.reset
+            }
+        } else {
+            Alert.alert("Les mots de passe ne correspondent pas")
+        }        
+    }
+
     return (
         <View style={styles.parentView}>
             <View style={styles.titlesView}>
@@ -24,7 +46,7 @@ export default function InscriptionPage({
                         style = {styles.inputIcons}
                         /> 
                     </Pressable>
-                    <TextInput style={styles.inputTextInput} placeholder="Username"/>
+                    <TextInput style={styles.inputTextInput} placeholder="Username" onChangeText={(text)=>{setUsername(text)}}/>
                 </View>
                 <View style={styles.inputView}>
                     <Pressable style={styles.inputPressable}>
@@ -33,7 +55,7 @@ export default function InscriptionPage({
                         style = {styles.inputIcons}
                         /> 
                     </Pressable>
-                    <TextInput style={styles.inputTextInput} placeholder="Email"/>
+                    <TextInput style={styles.inputTextInput} placeholder="Email" onChangeText={(text)=>{setEmail(text)}}/>
                 </View> 
                 <View style={styles.inputView}>
                     <Pressable style={styles.inputPressable} >
@@ -42,7 +64,7 @@ export default function InscriptionPage({
                         style = {styles.inputIcons}
                         />
                     </Pressable>
-                    <TextInput style={styles.inputTextInput} placeholder="Password"/>
+                    <TextInput style={styles.inputTextInput} placeholder="Password" onChangeText={(text)=>{setPassword(text)}}/>
                     <Pressable style={styles.inputPressableEnd} onPress={()=> Alert.alert("You pressed")}>
                         <Image
                         source={require("../../assets/icons/auth/View_light.jpg")}
@@ -57,7 +79,7 @@ export default function InscriptionPage({
                         style = {styles.inputIcons}
                         />
                     </Pressable>
-                    <TextInput style={styles.inputTextInput} placeholder="Confirm password"/>
+                    <TextInput style={styles.inputTextInput} placeholder="Confirm password" onChangeText={(text)=>{setConfirmedPassword(text)}}/>
                     <Pressable style={styles.inputPressableEnd} onPress={()=> Alert.alert("You pressed")}>
                         <Image
                         source={require("../../assets/icons/auth/View_light.jpg")}
@@ -67,7 +89,7 @@ export default function InscriptionPage({
                 </View>              
             </View>
             
-            <Pressable style={styles.signInPressable} onPress={()=>{Alert.alert("You pressed")}}>
+            <Pressable style={styles.signInPressable} onPress={()=>{ useRegister() }}>
                     <View >
                         <Text style={styles.signInButtonStyle}>Sign up</Text>
                     </View>

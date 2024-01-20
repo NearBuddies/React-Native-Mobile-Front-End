@@ -23,12 +23,14 @@ function UserViewCommunityLocation({ route }) {
         longitude: 0,
     });
 
-    // Define community position 
+    // Get community position 
     const [communityPosition, setCommunityPosition] = useState({
         latitude: 33.0000124,
         longitude: -7.001114,
     });
 
+    // Get the distance between them
+    const [distance, setDistance] = useState(1000);
 
     
     const [isPermissionRequested, setIsPermissionRequested] = useState(false);
@@ -114,7 +116,7 @@ function UserViewCommunityLocation({ route }) {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-      >
+        >
         <Marker
           coordinate={{
             latitude: userPosition.latitude,
@@ -140,25 +142,35 @@ function UserViewCommunityLocation({ route }) {
                 latitude: communityPosition.latitude,
                 longitude: communityPosition.longitude,
               }}
-              title="Position de l'assistant"
+              title="Position de la communauté"
               description="Position de la communauté"
               pinColor="green"
-            />
+            />  
+                  
           </>
+          
+          
         )}
+         
       </MapView>
+      
     ) : (
-      <Text>Chargement de la position... Rechargez la page</Text>
-    )}    
+      <Text style = {styles.mapChargingText}>Chargement de la position...Veuillez patienter</Text>
+    )}  
+    <TouchableOpacity style={styles.showDistanceView}>
+      <Text style={styles.showDistanceText}>{distance} meters</Text>
+    </TouchableOpacity> 
   </View>
 );
 };
 
 const styles = StyleSheet.create({
 container: {
-  height: Dimensions.get('window').height,
-  width: Dimensions.get('window').width,
-  marginBottom: Dimensions.get('window').height * 0.1,
+  //height: Dimensions.get('window').height,
+  //width: Dimensions.get('window').width,
+  // marginBottom: Dimensions.get('window').height * 0.1,
+  display : "flex",
+  flex: 1,
   backgroundColor: '#fff',
   position: 'relative',
 },
@@ -225,6 +237,32 @@ sendButtonText: {
   color: 'white',
   fontWeight: 'bold',
 },
+mapChargingText : {
+  fontSize: 15,
+  fontWeight : 'bold',
+  fontFamily : 'italic',
+  fontStyle : 'italic'
+},
+showDistanceView : {
+  position : 'absolute',
+  bottom : 0,
+  display : "flex",
+  flexDirection : "row",
+  justifyContent : "center",
+  alignItems : "center",
+  borderRadius : 10,
+  backgroundColor : '#ec6a6d',
+  width : '90%',
+  height : '7%',
+  marginLeft: '5%',
+  marginBottom : '2%'
+},
+showDistanceText : {
+  fontSize: 20,
+  fontWeight : 'bold',
+  fontStyle : 'italic',
+  color : "#fff"
+}
 });
 
 export default UserViewCommunityLocation;
