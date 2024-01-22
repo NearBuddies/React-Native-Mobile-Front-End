@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from "react";
 import { UseNavigation } from '@react-navigation/native';
-import { SafeAreaView, View, Text, Image ,TouchableOpacity, StyleSheet } from 'react-native';
+import { SafeAreaView, View, Text, Image ,TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import CustomAppBar from "../Common/CustomAppBar";
-import { FlatList } from "react-native-web";
 export default function UserCommunityPage () {
     // L'id de la communauté
-
+    
     // L'id de l'utilisateur
 
     // La communauté

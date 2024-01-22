@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View, TextInput, Image, Alert, Touchable } from 'react-native';
+import { Pressable, StyleSheet, Text, View, TextInput, Image, Alert, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native-web';
+
 
 export default function UserCreateCommunity({
 
 }) {
-    // <TouchableOpacity style={styles.changeImagePressable}>
-    //                                 <Text style={styles.changeImageText}>Change</Text>
-    //                             </TouchableOpacity>
-    // Se mettre une petite navigation
+   
+    // Se mettre une navigation
     const navigation = useNavigation();
     // Conserver l'image de la communauté
     const [ image, setImage ] = useState(null);

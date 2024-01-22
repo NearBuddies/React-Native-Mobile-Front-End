@@ -46,38 +46,11 @@ export default function UserMainPage() {
         navigation.navigate('UserSeeCommunityPage',id);
     }
     // Les communautés environnantes
-    const [ nearestCommunities, setNearestCommunities ] = useState(
-        [
-            {
-                id : 5 ,
-                name : 'Cookings tips',
-                imageUrl : require('../../assets/images/pure_vegetables.jpg'),
-                grade : 4.1
-            },
-            {
-                id : 6 ,
-                name : 'Animes lovers',
-                imageUrl : require('../../assets/images/hero_aca.jpg'),
-                grade : 4.8
-            },
-            {
-                id : 7 ,
-                name : 'La taverne',
-                imageUrl : require('../../assets/images/taverne.jpg'),
-                grade : 5
-            },
-            {
-                id : 8 ,
-                name : 'Les voleurs associés',
-                imageUrl : require('../../assets/images/fruits_salads.jpg'),
-                grade : 2
-            },
-        ]
-    )
+    const [ nearestCommunities, setNearestCommunities ] = useState([])
     // Le prochain événement
     const [nextEvent, setNextEvent] = useState({
         eventId : 1,
-        eventCommunity : 'Le club des imbéciles heureux',
+        eventCommunity : 'Le club des heureux',
         eventName : 'Go fishing',
         eventPitch : 'Allons pêcher sur le fleuve',
         eventDate : '12/01/2024',

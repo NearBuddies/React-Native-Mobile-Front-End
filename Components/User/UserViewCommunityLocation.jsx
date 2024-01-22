@@ -145,11 +145,8 @@ function UserViewCommunityLocation({ route }) {
               title="Position de la communauté"
               description="Position de la communauté"
               pinColor="green"
-            />  
-                  
-          </>
-          
-          
+            />             
+          </>    
         )}
          
       </MapView>
@@ -166,9 +163,6 @@ function UserViewCommunityLocation({ route }) {
 
 const styles = StyleSheet.create({
 container: {
-  //height: Dimensions.get('window').height,
-  //width: Dimensions.get('window').width,
-  // marginBottom: Dimensions.get('window').height * 0.1,
   display : "flex",
   flex: 1,
   backgroundColor: '#fff',

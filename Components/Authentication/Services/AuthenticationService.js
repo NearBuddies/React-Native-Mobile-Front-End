@@ -3,21 +3,29 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import { rootAddress } from "../../../Variables"
 
 const authenticate = (username, password) => {
-    axios.get(`${rootAddress}/`)
+    axios.get(`${rootAddress}/auth/signin`)
     .then((response)=>{
         if(response.data) {
             console.log("Authentication returned"+response.data)
             AsyncStorage.setItem("username",response.data.username)
             AsyncStorage.setItem("password",response.data.password)
             AsyncStorage.setItem("user_id",response.data.id)
-            return true;
+            return true
         }
     })
-    .catch((error)=>console.log(error))
+    .catch((error)=>{
+        console.log(error)
+        return false
+    })
 }
 
 const register = (username, password, email) => {
-    axios.post(`${rootAddress}/`)
+    axios.post(`${rootAddress}/auth/register`,{
+            "username" : username,
+            "password" : password,
+            "email" : email,
+            "credit" : 100 
+    }) 
     .then((response)=>{
         if(response.data) {
             console.log("Registration returned"+response.data)
@@ -27,7 +35,10 @@ const register = (username, password, email) => {
             return false
         }
     })
-    .catch((error)=>console.log(error))
+    .catch((error)=>{
+        console.log(error)
+        return false
+    })
 }
 
 export {
