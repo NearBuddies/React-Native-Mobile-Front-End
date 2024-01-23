@@ -19,7 +19,7 @@ export default function InscriptionPage({
     // Definir la fonction utilisée
     const useRegister = () => {
         if ( password === confirmedPassword ){
-            if( register(username,password, email) ) navigation.navigate('AuthentificationPage')
+            if( register(username,password, email) === true ) navigation.navigate('AuthentificationPage')
             else {
                 Alert.alert("Une erreur est survenue, veuillez réessayer");
                 navigation.reset

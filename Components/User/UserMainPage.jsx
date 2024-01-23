@@ -1,11 +1,15 @@
 //import liraries
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View,SafeAreaView, TextInput, Text, StyleSheet, ScrollView, Touchable, TouchableOpacity, FlatList, Image, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import UserCreateCommunity from './UserCreateCommunity';
 import UserSeeCommunityPage from './UserSeeCommunityPage';
+import { convertBytesToImage , makeBase64Image } from '../Common/Services/ImagesService';
+import { getNearestCommunitiesToUser } from '../Common/Services/CommunityService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // create a component
 export default function UserMainPage() {
+    
     // Se mettre une navigation
     const navigation = useNavigation();
     // Les communautés dans lesquelles je suis
@@ -57,8 +61,25 @@ export default function UserMainPage() {
         eventHour : '10:00',
         imageUrl : require('../../assets/images/peche.jpg')
     })
-    return (
-        <SafeAreaView style={styles.container}>
+
+ 
+    useEffect(() => {
+        const fetchNearestCommunities = async () => { 
+            try {
+                console.log("In use effect");
+                const theNearestCommunities = await getNearestCommunitiesToUser();
+                // console.log("Nearest communities " + JSON.stringify(theNearestCommunities));
+                setNearestCommunities(theNearestCommunities); // Set nearest communities
+                console.log("The nearest communities " + JSON.stringify(nearestCommunities));
+            } catch (error) {
+                console.error("Error while fetching nearest communities:", error);
+            }
+        };
+        fetchNearestCommunities();
+    }, []);
+
+    return ( 
+        <SafeAreaView style={styles.container}> 
             <TextInput style={styles.TextInput}/>
             <View>
                 <ScrollView
@@ -94,7 +115,6 @@ export default function UserMainPage() {
                         source = { typeof item.imageUrl==='string' ? {uri : item.imageUrl} : item.imageUrl }
                         style = {styles.topImagesStyle}
                         /> 
-                        
                     </TouchableOpacity>
                 )}
                 />
@@ -105,22 +125,19 @@ export default function UserMainPage() {
                     <Text style={styles.seeAllCommunityText}>See all</Text>
                 </TouchableOpacity>
             </View>
-            <View style = {styles.nearestCommunitiesStyle} >
+            <View style={styles.nearestCommunitiesStyle}>
                 <FlatList
-                data={nearestCommunities}
-                horizontal = {true}
-                showsHorizontalScrollIndicator = {false}
-                keyExtractor = {(item)=> item.id}
-                renderItem = {({item})=> (
+                    data={nearestCommunities}
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item, index }) => (
                     <TouchableOpacity
-                    style = { styles.nearestCommunitiesViewsStyle }
-                    onPress={ () => navigateToSeeCommunityPage(item.id) }>
-                        <Image 
-                        source = { typeof item.imageUrl==='string' ? {uri : item.imageUrl} : item.imageUrl }
-                        style = {styles.bottomImagesStyle}
-                        />
+                        style={styles.nearestCommunitiesViewsStyle}
+                        onPress={() => navigateToSeeCommunityPage(item.id)}>
+                        <Image source={{ uri: makeBase64Image(item.profilPhoto)}} style={styles.bottomImagesStyle} />
                     </TouchableOpacity>
-                )}
+                    )}
                 />
             </View>
             <TouchableOpacity style = {styles.nextEventView}>
@@ -156,7 +173,7 @@ const styles = StyleSheet.create({
         fontSize : 20,
         fontWeight : 'bold',
         marginVertical : 5
-    },
+    }, 
     scrollView : {
         marginTop: 15,
         marginBottom : 12

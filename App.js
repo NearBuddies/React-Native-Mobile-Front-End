@@ -18,7 +18,6 @@ const App = () => {
     const authenticateUser = async () => {
       try {
         // Get the username and the password
-
         const username = await AsyncStorage.getItem("username");
         const password = await AsyncStorage.getItem("password");
 

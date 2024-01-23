@@ -2,7 +2,7 @@ import { Text, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import InscriptionPage from './InscriptionPage';
 import AuthentificationPage from './AuthentificationPage'
-import { UserStack } from '../User/UserStack';
+import UserStack from '../User/UserStack';
 
 export default function AuthenticationNavigation(){
     const AuthenticationStack = createStackNavigator();

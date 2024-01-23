@@ -2,43 +2,46 @@ import axios from "axios"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { rootAddress } from "../../../Variables"
 
-const authenticate = (username, password) => {
-    axios.get(`${rootAddress}/auth/signin`)
-    .then((response)=>{
-        if(response.data) {
-            console.log("Authentication returned"+response.data)
-            AsyncStorage.setItem("username",response.data.username)
-            AsyncStorage.setItem("password",response.data.password)
-            AsyncStorage.setItem("user_id",response.data.id)
-            return true
+const authenticate = async (username, password) => {
+    try {
+        const response = await axios.post(`${rootAddress}/auth/signin`, {
+            "username": username,
+            "password": password
+        });
+
+        if (response.data) {
+            console.log("Authentication returned" + response.data);
+            AsyncStorage.setItem("username", response.data.username);
+            AsyncStorage.setItem("password", response.data.password);
+            AsyncStorage.setItem("user_id", response.data.id);
+            return true;
         }
-    })
-    .catch((error)=>{
-        console.log(error)
-        return false
-    })
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
 }
 
-const register = (username, password, email) => {
-    axios.post(`${rootAddress}/auth/register`,{
-            "username" : username,
-            "password" : password,
-            "email" : email,
-            "credit" : 100 
-    }) 
-    .then((response)=>{
-        if(response.data) {
-            console.log("Registration returned"+response.data)
-            return true
+const register = async (username, password, email) => {
+    try {
+        const response = await axios.post(`${rootAddress}/auth/register`, {
+            "username": username,
+            "password": password,
+            "email": email,
+            "credit": 100
+        });
+
+        if (response.data) {
+            console.log("Registration returned" + JSON.stringify(response.data));
+            return true;
         } else {
-            console.log(response)
-            return false
+            console.log(response);
+            return false;
         }
-    })
-    .catch((error)=>{
-        console.log(error)
-        return false
-    })
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
 }
 
 export {
