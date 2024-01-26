@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View, TextInput, Image, Alert, TouchableOpacity } from 'react-native';
+import { Button, Pressable, StyleSheet, Text, View, TextInput, Image, Alert, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
-
-
+import {Feather} from '@expo/vector-icons'
+import MapView from 'react-native-maps';
+import Modal from "react-native-modal";
 export default function NewEvent({
 
 }) {
@@ -31,6 +32,25 @@ export default function NewEvent({
         setImage(null)
         pickImage();
     }
+
+    //location picker
+    const locationPopup = async() => {
+        alert('Choose your location.');
+    }
+
+    const [isModalVisible, setModalVisible] = useState(false);
+
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
+
+    const [mapRegion, setmapRegion] = useState({
+        latitude: 37.78825,
+        longitude: -122.4324,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
+
     // Rendering de la page
     return (
         <View style={styles.parentView}> 
@@ -43,32 +63,39 @@ export default function NewEvent({
             <Text style = {styles.enhanceNewCommunityOrEventTextStyle}>Meet your community and earn credits!</Text>
             <View style={styles.centralView}>
                 <View style={styles.inputView}>
-                    <Pressable style={styles.inputPressable}>
-                        <Image
-                        source={require("../../assets/icons/Favorite_fill.jpg")}
-                        style = {styles.inputIcons}
-                        /> 
+                    <Pressable>
+                        <Feather name="type" size={24} color="#ec6a6d" style = {styles.inputIcons}/> 
                     </Pressable>
-                    <TextInput style={styles.inputTextInput} placeholder="Event title"/>
+                    <TextInput style={styles.inputTextInput} placeholder="Title"/>
                 </View>
                 <View style={styles.inputView}>
-                    <Pressable style={styles.inputPressable}>
-                        <Image
-                        source={require("../../assets/icons/File_dock_fill.jpg")}
-                        style = {styles.inputIcons}
-                        /> 
+                    <Pressable>
+                        <Feather name="align-justify" size={24} color="#ec6a6d" style = {styles.inputIcons}/> 
                     </Pressable>
                     <TextInput style={styles.inputTextInput} placeholder="Description"/>
+                </View>
+                <View  style={styles.inputView}>
+                    <Pressable onPress={toggleModal}>
+                        <Feather name="map" size={24} color="#ec6a6d" style = {styles.inputIcons}/>
+                    </Pressable>
+                    <TextInput style={styles.inputTextInput} placeholder="Location"/>
+                    <Modal isVisible={isModalVisible}>
+                        <View style={{ flex: 1 }}>
+                        <MapView
+                            style={{ alignSelf: 'stretch', height: '40%' }}
+                            region={mapRegion}
+                        />
+
+                        <Button title="Hide map" onPress={toggleModal} />
+                        </View>
+                    </Modal>
                 </View>
                 <View style={styles.uploadImageView}>
                         {
                             !image
                              &&                             
                             <Pressable style={styles.uploadImagePressable} onPress={pickImage}>
-                                <Image
-                                    source={require("../../assets/icons/Img_box_duotone_line.jpg")}
-                                    style = {styles.uploadImageIcon}
-                                /> 
+                                <Feather name="image" size={24} color="#ec6a6d" />
                                 <Text style={styles.uploadImageText}>Upload image</Text>
                             </Pressable>
                         }
@@ -111,7 +138,7 @@ const styles = StyleSheet.create({
     titlesImage: {
         width: 200,
         height : 80,
-        objectFit : "contain",
+        //objectFit : "contain",
         marginVertical: 50
     },
     createCommunityOrEventTextStyle : {
@@ -166,11 +193,9 @@ const styles = StyleSheet.create({
         borderRadius : 15,
         marginLeft : "auto",
     },
-    inputIcons : {
-        height : 50,
-        width : 40, 
+    inputIcons : { 
         marginHorizontal:10,
-        objectFit: "contain"
+        //objectFit: "contain"
     },
     inputTextInput : {
         flex : 1,
@@ -210,13 +235,13 @@ const styles = StyleSheet.create({
     },
     uploadImageView : {
         backgroundColor : '#fff',
-        width : '60%',
-        height : '60%',
+        width : '90%',
+        height : '40%',
         display : 'flex',
         flexDirection : 'column',
         justifyContent : 'center',
         alignItems : 'center',
-        marginLeft : '21%',
+        marginHorizontal: 20,
         borderRadius : 20,
         // borderStyle : 'dashed',
         // borderWidth :2,
@@ -241,7 +266,7 @@ const styles = StyleSheet.create({
         marginTop : '5%'
     },
     uploadImageIcon : {
-        objectFit : 'contain',
+        //objectFit : 'contain',
     },
     selectedImageView : {
         width : '100%',
