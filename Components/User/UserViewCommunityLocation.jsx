@@ -6,102 +6,100 @@ import * as Location from 'expo-location';
 import axios from 'axios';
 import { io } from 'socket.io-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute  } from '@react-navigation/native';
 import { rootAddress } from '../../Variables';
 import { GOOGLE_MAPS_APIKEY } from '../../Variables';
+import { findCommunity, findCommunityLocation, findDistanceBetweenUserAndCommunity } from '../Common/Services/CommunityService';
 import CustomAppBar from '../Common/CustomAppBar';
 
 function UserViewCommunityLocation({ route }) {
-    
-    console.log("Route params are :" + JSON.stringify(route.params));
-    
-    const navigation = useNavigation();
 
-    // Define user position 
-    const [userPosition, setUserPosition] = useState({
-        latitude: 0,
-        longitude: 0,
-    });
+  const community_id = route.params
+  
+  console.log("Route params are :" + JSON.stringify(route.params))
+  
+  const navigation = useNavigation();
 
-    // Get community position 
-    const [communityPosition, setCommunityPosition] = useState({
-        latitude: 33.0000124,
-        longitude: -7.001114,
-    });
+  // Define user position 
+  const [userPosition, setUserPosition] = useState({
+      latitude: 0,
+      longitude: 0,
+  });
 
-    // Get the distance between them
-    const [distance, setDistance] = useState(1000);
+  // Get community position 
+  const [communityPosition, setCommunityPosition] = useState({});
 
-    
-    const [isPermissionRequested, setIsPermissionRequested] = useState(false);
-    const [positionCalculated, setPositionCalculated] = useState(false);
+  // Get the distance between them
+  const [distance, setDistance] = useState(0);
 
-    const [address, setAddress] = useState('');
-    
-    const requestLocationPermission = async () => {
-        const { status } = await Location.requestForegroundPermissionsAsync();
-        if (status === 'granted') {
-        setIsPermissionRequested(true);
-        const location = await Location.getCurrentPositionAsync({});
-        const newlatitude = location.coords.latitude;
-        const newlongitude = location.coords.longitude;
-        setUserPosition({ latitude: newlatitude, longitude: newlongitude });
-        } else {
-        console.log("L'autorisation de géolocalisation a été refusée");
-        }
-    };
+  
+  const [isPermissionRequested, setIsPermissionRequested] = useState(false);
+  const [positionCalculated, setPositionCalculated] = useState(false);
 
-    const setActualUserPosition = useCallback(async () => {
-        try {
-        const location = await Location.getCurrentPositionAsync({});
-        const newlatitude = location.coords.latitude;
-        const newlongitude = location.coords.longitude;
-        setUserPosition({ latitude: newlatitude, longitude: newlongitude });
-        setPositionCalculated(true);
-        } catch (error) {
-        console.log(error); 
-        }
-    }, []);
+  const [address, setAddress] = useState('');
+  
+  const requestLocationPermission = async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === 'granted') {
+      setIsPermissionRequested(true);
+      const location = await Location.getCurrentPositionAsync({});
+      const newlatitude = location.coords.latitude;
+      const newlongitude = location.coords.longitude;
+      setUserPosition({ latitude: newlatitude, longitude: newlongitude });
+      } else {
+      console.log("L'autorisation de géolocalisation a été refusée");
+      }
+  };
 
-    // Ask permission, generally at first launch
-    useEffect(() => {
-        requestLocationPermission();
-    }, []);
+  const setActualUserPosition = useCallback(async () => {
+      try {
+      const location = await Location.getCurrentPositionAsync({});
+      const newlatitude = location.coords.latitude;
+      const newlongitude = location.coords.longitude;
+      setUserPosition({ latitude: newlatitude, longitude: newlongitude });
+      setPositionCalculated(true);
+      } catch (error) {
+      console.log(error); 
+      }
+  }, []);
 
-    useEffect(() => {
-        setActualUserPosition();
-    }, [setActualUserPosition]);
+  // At the page opening
+  useEffect( () => {
+    const fetchDatas = async () => {
+      requestLocationPermission() // Location permission
+      const the_community_position = await findCommunityLocation(community_id)
+      setCommunityPosition(the_community_position) // The position of community
+      const the_distance = await findDistanceBetweenUserAndCommunity(community_id)
+      setDistance(the_distance) // The distance between user and community
+    }
+    fetchDatas()
+  }, []);
 
-    useEffect(() => {
-        // Start tracking the user location
-        const startTrackingUserLocation = () => {
-        Location.watchPositionAsync(
-            {
-            // Tracking options
-            accuracy: Location.Accuracy.Highest,
-            distanceInterval: 10,
-            timeInterval: 1000
-            },
-            (location) => {
-            const newLatitude = location.coords.latitude;
-            const newLongitude = location.coords.longitude;
-            setUserPosition({ latitude: newLatitude, longitude: newLongitude });
-            console.log("I'm emitting")
-            /*socket.emit('postcitizenlocation', {
-                entity_id: 1,
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
-            });
-            socket.once('postcitizenlocation', (response) => {
-                console.log("User current stored location identifier is "+response.locationidentifier);
-            });*/
-            }
-        );
-        };
-        startTrackingUserLocation();
-        // Cleanup function
-        return () => {};
-    }, []);
+  useEffect(() => {
+      setActualUserPosition();
+  }, [setActualUserPosition]);
+
+  useEffect(() => {
+      // Start tracking the user location
+      const startTrackingUserLocation = () => {
+      Location.watchPositionAsync(
+          {
+          // Tracking options
+          accuracy: Location.Accuracy.Highest,
+          distanceInterval: 10,
+          timeInterval: 1000
+          },
+          (location) => {
+          const newLatitude = location.coords.latitude;
+          const newLongitude = location.coords.longitude;
+          setUserPosition({ latitude: newLatitude, longitude: newLongitude });
+          }
+      );
+      };
+      startTrackingUserLocation();
+      // Cleanup function
+      return () => {};
+  }, []);
 
 
   return (
@@ -234,7 +232,6 @@ sendButtonText: {
 mapChargingText : {
   fontSize: 15,
   fontWeight : 'bold',
-  fontFamily : 'italic',
   fontStyle : 'italic'
 },
 showDistanceView : {

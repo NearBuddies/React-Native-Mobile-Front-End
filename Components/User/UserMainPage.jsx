@@ -47,6 +47,7 @@ export default function UserMainPage() {
     }
     // Fonction pour naviguer vers la page pour voir les communautés
     const navigateToSeeCommunityPage = (id) => {
+        console.log('Navigating with id '+ id)
         navigation.navigate('UserSeeCommunityPage',id);
     }
     // Les communautés environnantes
@@ -66,11 +67,11 @@ export default function UserMainPage() {
     useEffect(() => {
         const fetchNearestCommunities = async () => { 
             try {
-                console.log("In use effect");
+                // console.log("In use effect");
                 const theNearestCommunities = await getNearestCommunitiesToUser();
                 // console.log("Nearest communities " + JSON.stringify(theNearestCommunities));
                 setNearestCommunities(theNearestCommunities); // Set nearest communities
-                console.log("The nearest communities " + JSON.stringify(nearestCommunities));
+                // console.log("The nearest communities " + JSON.stringify(nearestCommunities));
             } catch (error) {
                 console.error("Error while fetching nearest communities:", error);
             }

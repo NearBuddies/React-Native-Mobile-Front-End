@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View, TextInput, Image, Alert, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
+import { createCommunity } from '../Common/Services/CommunityService';
 
 
 export default function UserCreateCommunity({
@@ -9,9 +10,13 @@ export default function UserCreateCommunity({
 }) {
    
     // Se mettre une navigation
-    const navigation = useNavigation();
+    const navigation = useNavigation()
     // Conserver l'image de la communauté
-    const [ image, setImage ] = useState(null);
+    const [ image, setImage ] = useState(null)
+    // Le nom de la communauté
+    const [ name, setName ] = useState('')
+    // La description de la communauté
+    const [ description, setDescription ] = useState('')
     // Fonction de selection de l'image
     const pickImage = async () => {
         // No permissions request is necessary for launching the image library
@@ -31,6 +36,11 @@ export default function UserCreateCommunity({
         setImage(null)
         pickImage();
     }
+    // Création de la communauté et navigation
+    const createCommunityAndNavigate = async (name,description,photo) => {
+        const community_id = await createCommunity(name,description,photo)
+        navigation.navigate("UserSeeCommunityPage", community_id)
+    }
     // Rendering de la page
     return (
         <View style={styles.parentView}> 
@@ -49,7 +59,7 @@ export default function UserCreateCommunity({
                         style = {styles.inputIcons}
                         /> 
                     </Pressable>
-                    <TextInput style={styles.inputTextInput} placeholder="Community name"/>
+                    <TextInput style={styles.inputTextInput} placeholder="Community name" onChangeText={(text)=>setName(text)}/>
                 </View>
                 <View style={styles.inputView}>
                     <Pressable style={styles.inputPressable}>
@@ -58,13 +68,13 @@ export default function UserCreateCommunity({
                         style = {styles.inputIcons}
                         /> 
                     </Pressable>
-                    <TextInput style={styles.inputTextInput} placeholder="Description"/>
+                    <TextInput style={styles.inputTextInput} placeholder="Description" onChangeText={(text)=>setDescription(text)}/>
                 </View>
                 <View style={styles.uploadImageView}>
                         {
                             !image
                              &&                             
-                            <Pressable style={styles.uploadImagePressable} onPress={pickImage}>
+                            <Pressable style={styles.uploadImagePressable} onPress={repickImage}>
                                 <Image
                                     source={require("../../assets/icons/Img_box_duotone_line.jpg")}
                                     style = {styles.uploadImageIcon}
@@ -83,7 +93,7 @@ export default function UserCreateCommunity({
                 </View>                              
             </View>
             
-            <Pressable style={styles.signInPressable} onPress={()=>{Alert.alert("You pressed")}}>
+            <Pressable style={styles.signInPressable} onPress={()=>{ createCommunityAndNavigate(name,description,image) }}>
                     <View >
                         <Text style={styles.signInButtonStyle}>Let's go</Text>
                     </View>

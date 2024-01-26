@@ -1,46 +1,37 @@
-import React, {useState} from "react";
-import { UseNavigation, useNavigation } from '@react-navigation/native';
+import React, {useEffect, useState} from "react";
+import { useRoute, useNavigation } from '@react-navigation/native';
 import { SafeAreaView, View, Text, Image ,TouchableOpacity, Pressable } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomAppBar from "../Common/CustomAppBar";
 import UserCommunityPage from "./UserCommunityPage";
+import { findCommunity, joinCommunity } from "../Common/Services/CommunityService";
+import { makeBase64Image } from "../Common/Services/ImagesService";
 
 export default function UserSeeCommunityPage() {
     // On met une petite navigation
-    const navigation = useNavigation();
-    // On met la communauté donc on va visualiser les détails
-    const [communityToSeeMore, setCommunityToSeeMore] = useState({
-        id : 4,
-        imageUrl : require('../../assets/images/animesphere.jpeg'),
-        latitude : 33.007114,
-        longitude : -7.11240,
-        communityName : 'AnimeSphere',
-        communityGrade : 5,
-        communityNumberOfReviews : 270,
-        communityDescription : 
-`🌟 AnimeSphere – Your anime community! 
-🎉👋  Join us to discuss favorite anime, discover gems, and connect with fellow fans.
-🤩🎮 Engage in quizzes, polls, and challenges. Make friends, share fan art, and celebrate the anime universe! 
-🌈🚀 Join AnimeSphere – where every member is part of our anime family! 🌟
-#AnimeSphere #AnimeLove`            
-    })
-
-    // Fonction pour joindre la communauté
-    const joinCommunity = (communityId) => {
-        // Prendre mon identifiant
-        const userId = AsyncStorage.getItem('userId');
-        // Envoyer la requête après faite au backend
-            // ...
-        // Then , si c'est fait
-            // Naviguer vers la communauté, nouveau membre
-            navigation.navigate('UserCommunityPage');
-    }
+    const navigation = useNavigation()
+    const route = useRoute()
+    // Take id of community
+    const community_id = route.params
+    console.log("Route params are "+ community_id)
+    // The community
+    const [ communityToSeeMore, setCommunityToSeeMore ] = useState({})
 
     // Fonction pour naviguer vers la carte de la communauté
-    const navigateToViewCommunityLocation = () => {
-        navigation.navigate('UserViewCommunityLocation', { communityToSeeMore });
+    const navigateToViewCommunityLocation = (community_id) => {
+        navigation.navigate('UserViewCommunityLocation', community_id)
     }
 
+    // At the page opening
+    useEffect(()=>{
+        const fetchDatas = async () => {
+            const the_community = await findCommunity(community_id)
+            setCommunityToSeeMore(the_community)
+        }
+        fetchDatas()
+    },[])
+
+    // Render the page
     return (
         <SafeAreaView>
             <CustomAppBar/>
@@ -48,14 +39,14 @@ export default function UserSeeCommunityPage() {
                 <View style = {styles.imageView}>
                     <Image 
                     style = {styles.imageStyle}
-                    source= {communityToSeeMore.imageUrl}
+                    source= { {uri: makeBase64Image(communityToSeeMore.profilPhoto)} }
                     />
                 </View>
 
                 <View style={styles.middleView}>
 
                     <TouchableOpacity style = {styles.nameGradeOpacity}>
-                        <Text style={styles.communityNameStyle}>{communityToSeeMore.communityName}</Text>
+                        <Text style={styles.communityNameStyle}>{communityToSeeMore.name}</Text>
                         <View style = {styles.gradesView}>
                             <View style = {styles.starView}>
                                 <Image 
@@ -63,21 +54,19 @@ export default function UserSeeCommunityPage() {
                                 style = {styles.starStyle}
                                 />
                             </View>
-                            <Text style = {styles.numberOfReviewStyle}>{communityToSeeMore.communityGrade} - {communityToSeeMore.communityNumberOfReviews} Reviews</Text>
+                            <Text style = {styles.numberOfReviewStyle}>5 - 97 Reviews</Text>
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={()=>{navigateToViewCommunityLocation()}}>    
+                    <TouchableOpacity onPress={()=>{navigateToViewCommunityLocation(community_id)}}>    
                             <Text style={styles.ViewOnMapText}>View on map</Text>
                     </TouchableOpacity>
 
                 </View>
 
-                
-
                 <View style = {styles.descriptionView}>
                     <Text style = {styles.communityDescriptionStyle}>
-                        {communityToSeeMore.communityDescription}
+                        {communityToSeeMore.description}
                     </Text>
                 </View>
                 <TouchableOpacity
