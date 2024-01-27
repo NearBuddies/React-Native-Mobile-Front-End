@@ -17,9 +17,10 @@ export default function InscriptionPage({
     const [email, setEmail] = useState('')
 
     // Definir la fonction utilisée
-    const useRegister = () => {
+    const useRegister = async () => {
         if ( password === confirmedPassword ){
-            if( register(username,password, email) === true ) navigation.navigate('AuthentificationPage')
+            const registerBool = await register(username,password, email)
+            if( registerBool === true ) navigation.navigate('AuthentificationPage')
             else {
                 Alert.alert("Une erreur est survenue, veuillez réessayer");
                 navigation.reset

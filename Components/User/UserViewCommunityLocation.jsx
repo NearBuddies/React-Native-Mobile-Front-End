@@ -7,6 +7,7 @@ import axios from 'axios';
 import { io } from 'socket.io-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useRoute  } from '@react-navigation/native';
+import { getDistance, getPreciseDistance } from 'geolib';
 import { rootAddress } from '../../Variables';
 import { GOOGLE_MAPS_APIKEY } from '../../Variables';
 import { findCommunity, findCommunityLocation, findDistanceBetweenUserAndCommunity } from '../Common/Services/CommunityService';
@@ -69,11 +70,13 @@ function UserViewCommunityLocation({ route }) {
       requestLocationPermission() // Location permission
       const the_community_position = await findCommunityLocation(community_id)
       setCommunityPosition(the_community_position) // The position of community
-      const the_distance = await findDistanceBetweenUserAndCommunity(community_id)
+      
+      const the_distance = getPreciseDistance(userPosition,the_community_position)
+
       setDistance(the_distance) // The distance between user and community
     }
     fetchDatas()
-  }, []);
+  }, []);  // userPosition , will insert later
 
   useEffect(() => {
       setActualUserPosition();

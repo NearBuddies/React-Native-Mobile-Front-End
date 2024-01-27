@@ -1,6 +1,8 @@
 import axios from "axios"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { rootAddress } from "../../../Variables"
+import { saveUserLocation } from "../../User/Services/UserService"
+import { getCurrentLatitudeAndLongitude } from '../../Common/Services/CommunityService'
 
 const authenticate = async (username, password) => {
     try {
@@ -33,6 +35,11 @@ const register = async (username, password, email) => {
 
         if (response.data) {
             console.log("Registration returned" + JSON.stringify(response.data));
+            const { latitude, longitude } =  getCurrentLatitudeAndLongitude()
+            const anotherResponse = saveUserLocation(response.data.id, latitude, longitude)
+            if(anotherResponse) {
+                console.log('Successfully created user and saved his stable location') // His house or from where he created
+            }
             return true;
         } else {
             console.log(response);

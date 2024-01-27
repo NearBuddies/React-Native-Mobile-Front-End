@@ -20,8 +20,8 @@ const App = () => {
         // Get the username and the password
         const username = await AsyncStorage.getItem("username");
         const password = await AsyncStorage.getItem("password");
-
-        if ( authenticate(username,password) ){
+        const authenticateBool = await authenticate(username,password)
+        if (authenticateBool){
           // Set userAuthenticated to true
           setUserAuthenticated(true);
         } else {

@@ -50,8 +50,7 @@ const createCommunity = async (name, description, photo) => {
         uri: photo,
         name: `${name}`,
         type: 'image/jpeg',
-    });
-
+    })
     formData.append(
     'body',
     JSON.stringify({
@@ -59,29 +58,24 @@ const createCommunity = async (name, description, photo) => {
         description,
         visibility: 'PUBLIC',
     })
-    );
-
+    )
     const response = await axios.post(`${rootAddress}/community/new`, formData, {
     headers: {
         'Content-Type': 'multipart/form-data',
     },
-    });
-
+    })
     if (response) {
-    console.log('Create community returned', response.data);
-
-    const { latitude, longitude } = await getCurrentLatitudeAndLongitude();
-    const anotherResponse = await saveCommunityLocation(response.data.id, latitude, longitude);
-
+        // console.log('Create community returned', response.data);
+    const { latitude, longitude } = await getCurrentLatitudeAndLongitude()
+    const anotherResponse = await saveCommunityLocation(response.data.id, latitude, longitude)
     if (anotherResponse) {
-        console.log('Successfully created community and saved its location');
+        console.log('Successfully created community and saved its location')
     }
-
-    return response.data.id;
+    return response.data.id
     }
 } catch (err) {
-    console.log('Error in create community:', err);
-    throw err;
+    console.log('Error in create community:', err)
+    throw err
 }
 }
   
@@ -177,6 +171,7 @@ export {
     findCommunity,
     findCommunityLocation,
     findDistanceBetweenUserAndCommunity,
+    getCurrentLatitudeAndLongitude,
     getCommunitiesOfUser,
     getNearestCommunitiesToUser,
     createCommunity,

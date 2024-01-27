@@ -3,6 +3,24 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import { rootAddress } from "../../../Variables"
 import { spatial_db_rootAddress }  from "../../../Variables"
 
+//Save user location
+const saveUserLocation = async (entity_id,latitude,longitude) => {
+    axios.post(`${spatial_db_rootAddress}/postentitylocation`,{
+        "entity_id" : entity_id,
+        "entity_type" : "user",
+        "latitude" : latitude,
+        "longitude" : longitude,
+    })
+         .then((response)=>{
+            console.log('Save user location returned '+response.data)
+         })
+         .catch((err)=>{
+            
+            console.log('Error in save user '+err)
+         })
+}
+
+// Get user latest location
 const getLatestUserLocation = async (user_id) => {
     // Get the latest user latitude and longitude
     axios.get(`${spatial_db_rootAddress}/getlatestentitylocation/${user_id}`)
@@ -14,6 +32,9 @@ const getLatestUserLocation = async (user_id) => {
         }).catch(err=>console.log(err))
 }
 
+
+
 export {
-    getLatestUserLocation
+    getLatestUserLocation,
+    saveUserLocation
 }
