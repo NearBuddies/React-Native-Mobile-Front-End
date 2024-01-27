@@ -9,17 +9,26 @@ import Modal from "react-native-modal";
 import { getDistance } from 'geolib';
 import Geocoder from 'react-native-geocoding';
 import { GOOGLE_MAPS_APIKEY } from '../../Variables';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 export default function NewEvent({
 
 }) {
 
-    // Se mettre une navigation
     const navigation = useNavigation();
-    // Conserver l'image de la communauté
     const [image, setImage] = useState(null);
-    // Fonction de selection de l'image
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [locationAddress, setLocationAddress] = useState('');
+    const [currentLocation, setCurrentLocation] = useState(null);
+    const [selectedLocation, setSelectedLocation] = useState(null);
+    const [initialRegion, setInitialRegion] = useState(null);
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(null);
+    const communityCeneter = {
+        latitude: 33.70148331198053,
+        longitude: -7.362316735088825,
+    }
+
     const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
@@ -31,36 +40,21 @@ export default function NewEvent({
             setImage(result.assets[0].uri);
         }
     };
-    // Fonction pour recommencer la sélection d'image
     const repickImage = async () => {
         setImage(null)
         pickImage();
     }
-
-    //location picker
-
-    const [isModalVisible, setModalVisible] = useState(false);
-
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
     };
-
-    const communityCeneter = {
-        latitude: 33.70148331198053,
-        longitude: -7.362316735088825,
-    }
-
     const calculateDistance = (coord1, coord2) => {
         return getDistance(coord1, coord2);
     };
 
-    const [locationAddress, setLocationAddress] = useState('');
     Geocoder.init(GOOGLE_MAPS_APIKEY);
     const handleMapPress = async (event) => {
         const selectedCoords = event.nativeEvent.coordinate;
-
         const distance = calculateDistance(communityCeneter, selectedCoords);
-
         if (distance > 30000) {
             Alert.alert('Invalid Location', 'Selected location is too far from your community. Please choose a location within 30 kilometers.');
         } else {
@@ -78,10 +72,7 @@ export default function NewEvent({
 
     const handlePoiClick = async (event) => {
         const { placeId, name, coordinate } = event.nativeEvent;
-        // Handle the POI click event
         console.log('POI Clicked - Place ID:', placeId, 'Name:', name, 'Coordinate:', coordinate);
-        // You can use the placeId, name, and coordinate as needed
-        // For example, you might want to set the selected location or show additional details
         setSelectedLocation(coordinate);
         try {
             const locationDetails = await Geocoder.from(selectedCoords.latitude, selectedCoords.longitude);
@@ -92,18 +83,11 @@ export default function NewEvent({
         }
     };
 
-
     const handleLocationConfirmation = () => {
         console.log("Selected Location:", selectedLocation);
         console.log("Adress:", locationAddress);
-        // Add logic to save the location data, e.g., in state or AsyncStorage
-        // ...
         toggleModal();
     };
-
-    const [currentLocation, setCurrentLocation] = useState(null);
-    const [selectedLocation, setSelectedLocation] = useState(null);
-    const [initialRegion, setInitialRegion] = useState(null);
 
     useEffect(() => {
         const getLocation = async () => {
@@ -112,10 +96,8 @@ export default function NewEvent({
                 console.log("Permission to access location was denied");
                 return;
             }
-
             let location = await Location.getCurrentPositionAsync({});
             setCurrentLocation(location.coords);
-
             setInitialRegion({
                 latitude: location.coords.latitude,
                 longitude: location.coords.longitude,
@@ -123,7 +105,6 @@ export default function NewEvent({
                 longitudeDelta: 0.01,
             });
         };
-
         getLocation();
         const reverseGeocodeLocation = async () => {
             const { latitude, longitude } = selectedLocation;
@@ -133,9 +114,20 @@ export default function NewEvent({
         reverseGeocodeLocation();
     }, []);
 
-    const [markerData, setMarkerData] = useState({});
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+    };
 
-    // Rendering de la page
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+    };
+
+    const handleConfirm = (date) => {
+        console.log("A date has been picked: ", date);
+        setSelectedDate(date.toISOString());
+        hideDatePicker();
+    };
+
     return (
         <View style={styles.parentView}>
             <View style={styles.titlesView}>
@@ -160,7 +152,7 @@ export default function NewEvent({
                 </View>
                 <View style={styles.inputView}>
                     <Pressable onPress={toggleModal}>
-                        <Feather name="map" size={24} color="#ec6a6d" style={styles.inputIcons} />
+                        <Feather name="map-pin" size={24} color="#ec6a6d" style={styles.inputIcons} />
                     </Pressable>
                     <TextInput style={styles.inputTextInput} placeholder="Location" value={locationAddress} />
                     <Modal isVisible={isModalVisible}>
@@ -215,6 +207,18 @@ export default function NewEvent({
                             <Button title="Confirm Location" onPress={handleLocationConfirmation} />
                         </View>
                     </Modal>
+                </View>
+                <View style={styles.inputView}>
+                    <Pressable onPress={showDatePicker}>
+                        <Feather name="calendar" size={24} color="#ec6a6d" style={styles.inputIcons} />
+                    </Pressable>
+                    <TextInput style={styles.inputTextInput} placeholder="Date" value={selectedDate ? new Date(selectedDate).toLocaleDateString() : ''} />
+                    <DateTimePickerModal
+                        isVisible={isDatePickerVisible}
+                        mode="date"
+                        onConfirm={handleConfirm}
+                        onCancel={hideDatePicker}
+                    />
                 </View>
                 <View style={styles.uploadImageView}>
                     {
