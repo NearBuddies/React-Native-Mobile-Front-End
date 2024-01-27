@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { Button, Pressable, StyleSheet, Text, View, TextInput, Image, Alert, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Button, Pressable, StyleSheet, Text, View, TextInput, Image, Alert, TouchableOpacity, Dimensions, } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import {Feather} from '@expo/vector-icons'
-import MapView from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import * as Location from 'expo-location';
 import Modal from "react-native-modal";
 export default function NewEvent({
 
@@ -34,9 +35,6 @@ export default function NewEvent({
     }
 
     //location picker
-    const locationPopup = async() => {
-        alert('Choose your location.');
-    }
 
     const [isModalVisible, setModalVisible] = useState(false);
 
@@ -44,12 +42,33 @@ export default function NewEvent({
         setModalVisible(!isModalVisible);
     };
 
-    const [mapRegion, setmapRegion] = useState({
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      });
+    const windowWidth = Dimensions.get("window").width;
+    const windowHeight = Dimensions.get("window").height;
+
+    const [currentLocation, setCurrentLocation] = useState(null);
+    const [initialRegion, setInitialRegion] = useState(null);
+
+    useEffect(() => {
+        const getLocation = async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+            console.log("Permission to access location was denied");
+            return;
+        }
+
+        let location = await Location.getCurrentPositionAsync({});
+        setCurrentLocation(location.coords);
+
+        setInitialRegion({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
+        });
+        };
+
+        getLocation();
+    }, []);
 
     // Rendering de la page
     return (
@@ -81,10 +100,23 @@ export default function NewEvent({
                     <TextInput style={styles.inputTextInput} placeholder="Location"/>
                     <Modal isVisible={isModalVisible}>
                         <View style={{ flex: 1 }}>
-                        <MapView
-                            style={{ alignSelf: 'stretch', height: '40%' }}
-                            region={mapRegion}
-                        />
+                            <MapView
+                                style={StyleSheet.absoluteFill}
+                                provider= {PROVIDER_GOOGLE}
+                                initialRegion={initialRegion}
+                                showsUserLocation
+                                showsMyLocationButton
+                            >
+                                {currentLocation && (
+                                    <Marker
+                                    coordinate={{
+                                        latitude: currentLocation.latitude,
+                                        longitude: currentLocation.longitude,
+                                    }}
+                                    title="Your Location"
+                                    />
+                                )}
+                            </MapView>
 
                         <Button title="Hide map" onPress={toggleModal} />
                         </View>
@@ -138,7 +170,7 @@ const styles = StyleSheet.create({
     titlesImage: {
         width: 200,
         height : 80,
-        //objectFit : "contain",
+        objectFit : "contain",
         marginVertical: 50
     },
     createCommunityOrEventTextStyle : {
