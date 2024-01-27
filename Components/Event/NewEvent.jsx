@@ -3,9 +3,12 @@ import { Button, Pressable, StyleSheet, Text, View, TextInput, Image, Alert, Tou
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons'
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, Circle, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import Modal from "react-native-modal";
+import { getDistance } from 'geolib';
+import Geocoder from 'react-native-geocoding';
+import { GOOGLE_MAPS_APIKEY } from '../../Variables';
 export default function NewEvent({
 
 }) {
@@ -42,18 +45,61 @@ export default function NewEvent({
         setModalVisible(!isModalVisible);
     };
 
-    const handleMapPress = (event) => {
-        const { coordinate } = event.nativeEvent;
-        setSelectedLocation(coordinate);
+    const communityCeneter = {
+        latitude: 33.70148331198053,
+        longitude: -7.362316735088825,
+    }
+
+    const calculateDistance = (coord1, coord2) => {
+        return getDistance(coord1, coord2);
     };
+
+    const [locationAddress, setLocationAddress] = useState('');
+    Geocoder.init(GOOGLE_MAPS_APIKEY);
+    const handleMapPress = async (event) => {
+        const selectedCoords = event.nativeEvent.coordinate;
+
+        const distance = calculateDistance(communityCeneter, selectedCoords);
+
+        if (distance > 30000) {
+            Alert.alert('Invalid Location', 'Selected location is too far from your community. Please choose a location within 30 kilometers.');
+        } else {
+            setSelectedLocation(selectedCoords);
+
+            try {
+                const locationDetails = await Geocoder.from(selectedCoords.latitude, selectedCoords.longitude);
+                const address = locationDetails.results[0].formatted_address;
+                setLocationAddress(address);
+            } catch (error) {
+                console.warn(error);
+            }
+        }
+    };
+
+    const handlePoiClick = async (event) => {
+        const { placeId, name, coordinate } = event.nativeEvent;
+        // Handle the POI click event
+        console.log('POI Clicked - Place ID:', placeId, 'Name:', name, 'Coordinate:', coordinate);
+        // You can use the placeId, name, and coordinate as needed
+        // For example, you might want to set the selected location or show additional details
+        setSelectedLocation(coordinate);
+        try {
+            const locationDetails = await Geocoder.from(selectedCoords.latitude, selectedCoords.longitude);
+            const address = locationDetails.results[0].formatted_address;
+            setLocationAddress(address);
+        } catch (error) {
+            console.warn(error);
+        }
+    };
+
 
     const handleLocationConfirmation = () => {
         console.log("Selected Location:", selectedLocation);
+        console.log("Adress:", locationAddress);
         // Add logic to save the location data, e.g., in state or AsyncStorage
         // ...
         toggleModal();
     };
-
 
     const [currentLocation, setCurrentLocation] = useState(null);
     const [selectedLocation, setSelectedLocation] = useState(null);
@@ -80,12 +126,14 @@ export default function NewEvent({
 
         getLocation();
         const reverseGeocodeLocation = async () => {
-            const { latitude, longitude } = location;
+            const { latitude, longitude } = selectedLocation;
             const results = await Location.reverseGeocodeAsync({ latitude, longitude });
             console.log(`Reverse Geocoded Address: ${results[0]}`);
         };
         reverseGeocodeLocation();
     }, []);
+
+    const [markerData, setMarkerData] = useState({});
 
     // Rendering de la page
     return (
@@ -114,7 +162,7 @@ export default function NewEvent({
                     <Pressable onPress={toggleModal}>
                         <Feather name="map" size={24} color="#ec6a6d" style={styles.inputIcons} />
                     </Pressable>
-                    <TextInput style={styles.inputTextInput} placeholder="Location" />
+                    <TextInput style={styles.inputTextInput} placeholder="Location" value={locationAddress} />
                     <Modal isVisible={isModalVisible}>
                         <View style={{ flex: 1 }}>
                             <MapView
@@ -124,9 +172,34 @@ export default function NewEvent({
                                 showsUserLocation
                                 showsMyLocationButton
                                 onPress={handleMapPress}
+                                zoomEnabled={true}
+                                minZoomLevel={2}
+                                scrollEnabled={true}
+                                showsScale={true}
+                                zoomControlEnabled={true}
+                                zoomTapEnabled={true}
+                                onPoiClick={handlePoiClick}
                             >
+                                <Marker coordinate={communityCeneter} title="Community Center">
+                                    <View
+                                        style={{
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}>
+                                        <Feather name="radio" size={30} color="black" />
+                                        <Text style={{ fontWeight: "800" }}>Community Center</Text>
+                                    </View>
+                                </Marker>
+                                <Circle
+                                    center={communityCeneter}
+                                    radius={30000}
+                                    strokeWidth={1}
+                                    strokeColor='rgba(255,0,0,0.2)'
+                                    fillColor='rgba(237,106,109,0.2)'
+                                />
                                 {selectedLocation ? (
-                                    <Marker coordinate={selectedLocation} title="Selected Location" />
+                                    <Marker draggable coordinate={selectedLocation} title="Selected Location" />
                                 ) : (
                                     currentLocation && (
                                         <Marker
