@@ -42,37 +42,49 @@ const getCurrentLatitudeAndLongitude = async () => {
 
 // Create a community
 const createCommunity = async (name, description, photo) => {
-    // Make the body 
-    let body = `{
-        "name" : ${name},
-        "description" : ${description},
-        "visibility" : "PUBLIC"
-    }`
-    // Create the form data
-    let form = new FormData()
-    // Append the body
-    form.append('body',body)
-    // Append photo
-    form.append('photo', {
-        name: photo.fileName,
-        type: photo.type,
-        uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
-    })
-    // Get current position
-    const { latitude, longitude } = await getCurrentLatitudeAndLongitude();
-    // Send to create community
     try {
-        const response = await axios.post(`${rootAddress}/community/new`,form)
-        if(response){
-            console.log("Create community returned" + response.data)
-            const another_response = await saveCommunityLocation(response.data.id, latitude, longitude) 
-            if(another_response) console.log("Successufully created community and saved it's location")
-            return response.data.id
-        }
-    } catch(err){
-        throw err
+    const formData = new FormData();
+    // console.log(photo)
+    // Append the photo to FormData
+    formData.append('photo', {
+        uri: photo,
+        name: `${name}`,
+        type: 'image/jpeg',
+    });
+
+    formData.append(
+    'body',
+    JSON.stringify({
+        name,
+        description,
+        visibility: 'PUBLIC',
+    })
+    );
+
+    const response = await axios.post(`${rootAddress}/community/new`, formData, {
+    headers: {
+        'Content-Type': 'multipart/form-data',
+    },
+    });
+
+    if (response) {
+    console.log('Create community returned', response.data);
+
+    const { latitude, longitude } = await getCurrentLatitudeAndLongitude();
+    const anotherResponse = await saveCommunityLocation(response.data.id, latitude, longitude);
+
+    if (anotherResponse) {
+        console.log('Successfully created community and saved its location');
     }
+
+    return response.data.id;
+    }
+} catch (err) {
+    console.log('Error in create community:', err);
+    throw err;
 }
+}
+  
 
 // Find a community
 const findCommunity = async (community_id) => {

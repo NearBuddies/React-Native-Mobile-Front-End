@@ -112,7 +112,7 @@ const styles = {
         fontSize: 15,
         fontWeight: 'bold',
         fontStyle: 'italic', 
-        marginLeft: '54%'
+        marginLeft: '42%'
     },
     communityNameStyle : {
         fontSize : 20,

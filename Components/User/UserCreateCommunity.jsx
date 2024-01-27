@@ -30,7 +30,7 @@ export default function UserCreateCommunity({
         if (!result.canceled) {
           setImage(result.assets[0].uri);
         }
-    };
+    }
     // Fonction pour recommencer la sélection d'image
     const repickImage = async () => {
         setImage(null)
