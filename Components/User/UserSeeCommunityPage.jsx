@@ -22,6 +22,17 @@ export default function UserSeeCommunityPage() {
         navigation.navigate('UserViewCommunityLocation', community_id)
     }
 
+    // Fonction pour gérer join community
+    const navigateToJoinedCommunityLocation = async (community_id) => {
+        const response = await joinCommunity(community_id)
+        if(response==='JUST_JOINED'){
+            navigation.navigate('UserNavigation')
+        }
+        else {
+            navigation.navigate('UserCommunityPage', community_id)
+        }
+    }
+
     // At the page opening
     useEffect(()=>{
         const fetchDatas = async () => {
@@ -71,7 +82,7 @@ export default function UserSeeCommunityPage() {
                 </View>
                 <TouchableOpacity
                 style = {styles.joinCommunityStyle}
-                onPress={ ()=> joinCommunity(communityToSeeMore.id)}
+                onPress={ ()=> navigateToJoinedCommunityLocation(communityToSeeMore.id)}
                 >
                     <Text style = {styles.joinCommunityTextStyle}>Join community</Text>
                 </TouchableOpacity>
@@ -165,7 +176,7 @@ const styles = {
         alignSelf : 'center',
         marginVertical : '12%',
         borderRadius : 10,
-        marginTop : '15%',
+        marginTop : '50%',
         marginBottom : '2%'
     },
     joinCommunityTextStyle : {

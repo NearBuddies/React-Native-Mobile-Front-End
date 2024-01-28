@@ -109,24 +109,20 @@ const findCommunityLocation = async (community_id) => {
     }
 };
 
-// Find distance between user and community
-const findDistanceBetweenUserAndCommunity = async (community_id) => {
-    // find user id
-    const user_id = AsyncStorage.getItem("user_id")
-    try {
-        const response = await axios.post(`${spatial_db_rootAddress}/getdistancetwoentities/${user_id}/${community_id}`)
-        if(response.data) {
-            return response.data.distance
-        }
-    } catch (err) {
-        console.log("Erreur dans la recherche de la distance "+ err)
-        throw err
-    }
-}
-
 // Get communities in which user already is
 const getCommunitiesOfUser = async () => {
-    // This should be implemented in backend first
+    // find user id
+    const user_id = await AsyncStorage.getItem("user_id")
+    console.log("L'id envoyé est " + user_id)
+    try {
+        const response = await axios.get(`${rootAddress}/community/findCommunitiesOfUser/${user_id}`)
+        if(response.data) {
+            return response.data
+        }
+    } catch (err) {
+        console.log("Erreur dans la recherche des communautés "+ err)
+        throw err
+    }
 }   
 
 // Get the nearest communities of an user
@@ -160,17 +156,25 @@ const getNearestCommunitiesToUser = async () => {
 }
 
 // Join a community
-const joinCommunity = (communityId) => {
-    // Take the user id
-    const userId = AsyncStorage.getItem('userId');
-    // Send the request
-    // ...
+const joinCommunity = async (communityId) => {
+    const user_id = await AsyncStorage.getItem("user_id")
+    console.log("L'id envoyé est " + user_id)
+    try {
+        const response = await axios.post(`${rootAddress}/community/join/${user_id}/${communityId}`)
+        if(response.data) {
+            console.log('Rejointe avec succès')
+            return 'JUST_JOINED'
+        }
+    } catch (err) {
+        console.log("Deja dans la communauté "+ err)
+        return 'ALREADY_IN'
+    }
 }
 
+// Export the datas
 export {
     findCommunity,
     findCommunityLocation,
-    findDistanceBetweenUserAndCommunity,
     getCurrentLatitudeAndLongitude,
     getCommunitiesOfUser,
     getNearestCommunitiesToUser,

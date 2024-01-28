@@ -2,10 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { View,SafeAreaView, TextInput, Text, StyleSheet, ScrollView, Touchable, TouchableOpacity, FlatList, Image, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import UserCreateCommunity from './UserCreateCommunity';
-import UserSeeCommunityPage from './UserSeeCommunityPage';
-import { convertBytesToImage , makeBase64Image } from '../Common/Services/ImagesService';
-import { getNearestCommunitiesToUser } from '../Common/Services/CommunityService';
+import { makeBase64Image } from '../Common/Services/ImagesService';
+import { getNearestCommunitiesToUser, getCommunitiesOfUser } from '../Common/Services/CommunityService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // create a component
 export default function UserMainPage() {
@@ -13,42 +11,20 @@ export default function UserMainPage() {
     // Se mettre une navigation
     const navigation = useNavigation();
     // Les communautés dans lesquelles je suis
-    const [ myCommunities, setMyCommunities] = useState(
-        [
-            {
-                id : 1 ,
-                name : 'The cat coffee',
-                imageUrl : require('../../assets/images/cats.jpeg'),
-                grade : 4.5
-            },
-            {
-                id : 2 ,
-                name : 'Cow-boys',
-                imageUrl : require('../../assets/images/cowboy.jpg'),
-                grade : 3.5
-            },
-            {
-                id : 3 ,
-                name : 'Basketeers',
-                imageUrl : require('../../assets/images/the_goat.jpg'),
-                grade : 4
-            },
-            {
-                id : 4 ,
-                name : 'Momies for babies',
-                imageUrl : require('../../assets/images/junk_food.jpg'),
-                grade : 3.2
-            },
-        ]
-    ) 
+    const [ myCommunities, setMyCommunities] = useState([]) 
     // Fonction de navigation vers la création de communauté
     const navigateToCreateCommunity = () => {
-        navigation.navigate('UserCreateCommunity');
+        navigation.navigate('UserCreateCommunity')
     }
     // Fonction pour naviguer vers la page pour voir les communautés
     const navigateToSeeCommunityPage = (id) => {
         console.log('Navigating with id '+ id)
-        navigation.navigate('UserSeeCommunityPage',id);
+        navigation.navigate('UserSeeCommunityPage',id)
+    }
+    // Fonction pour naviguer vers la page de la communauté
+    const navigateToCommunityPage = (id) => {
+        console.log('Navigating to community page with id '+ id)
+        navigation.navigate('UserCommunityPage',id)
     }
     // Les communautés environnantes
     const [ nearestCommunities, setNearestCommunities ] = useState([])
@@ -61,22 +37,25 @@ export default function UserMainPage() {
         eventDate : '12/01/2024',
         eventHour : '10:00',
         imageUrl : require('../../assets/images/peche.jpg')
-    })
+    }) 
 
  
     useEffect(() => {
-        const fetchNearestCommunities = async () => { 
+        const fetchCommunities = async () => { 
             try {
                 // console.log("In use effect");
                 const theNearestCommunities = await getNearestCommunitiesToUser();
                 // console.log("Nearest communities " + JSON.stringify(theNearestCommunities));
                 setNearestCommunities(theNearestCommunities); // Set nearest communities
                 // console.log("The nearest communities " + JSON.stringify(nearestCommunities));
+                const userCommunities = await getCommunitiesOfUser();
+                setMyCommunities(userCommunities); // Set user communities
             } catch (error) {
                 console.error("Error while fetching nearest communities:", error);
             }
         };
-        fetchNearestCommunities();
+        fetchCommunities()
+        // console.log("myCommunities is" + JSON.stringify(myCommunities,null,2) )
     }, []);
 
     return ( 
@@ -111,9 +90,11 @@ export default function UserMainPage() {
                 showsHorizontalScrollIndicator = {false}
                 keyExtractor = {(item)=> item.id}
                 renderItem = {({item})=> (
-                    <TouchableOpacity style = {styles.myCommunitiesViews}>
+                    <TouchableOpacity 
+                    style = {styles.myCommunitiesViews}
+                    onPress={()=>{navigateToCommunityPage(item.id)}}>
                         <Image 
-                        source = { typeof item.imageUrl==='string' ? {uri : item.imageUrl} : item.imageUrl }
+                        source = {{ uri: makeBase64Image(item.profilPhoto) }}  // typeof item.imageUrl==='string' ? {uri : item.imageUrl} : item.imageUrl
                         style = {styles.topImagesStyle}
                         /> 
                     </TouchableOpacity>
