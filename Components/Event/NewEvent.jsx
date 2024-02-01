@@ -10,6 +10,8 @@ import { getDistance } from 'geolib';
 import Geocoder from 'react-native-geocoding';
 import { GOOGLE_MAPS_APIKEY } from '../../Variables';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { SelectList } from 'react-native-dropdown-select-list'
+import { ScrollView } from 'react-native';
 export default function NewEvent({
 
 }) {
@@ -23,6 +25,8 @@ export default function NewEvent({
     const [initialRegion, setInitialRegion] = useState(null);
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
+    const [credits, setCredits] = React.useState(0);
+    const [type, setType] = React.useState("");
     const communityCeneter = {
         latitude: 33.70148331198053,
         longitude: -7.362316735088825,
@@ -128,7 +132,15 @@ export default function NewEvent({
         hideDatePicker();
     };
 
+    const types = [
+        { key: '1', value: 'Public' },
+        { key: '2', value: 'Private' },
+        { key: '3', value: 'Secret' },
+        //{key:'4', value:'Special', disabled:true},
+    ]
+
     return (
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.parentView}>
             <View style={styles.titlesView}>
                 <Image source={require("../../assets/images/NearBuddies_logo.jpg")}
@@ -220,6 +232,29 @@ export default function NewEvent({
                         onCancel={hideDatePicker}
                     />
                 </View>
+                <View style={styles.inputView}>
+                    <View>
+                        <Pressable onPress={() => setCredits(credits + 1)}>
+                            <Feather name="chevron-up" size={24} color="#ec6a6d" style={styles.inputIcons} />
+                        </Pressable>
+                        <Pressable onPress={() => setCredits(Math.max(credits - 1, 0))} >
+                            <Feather name="chevron-down" size={24} color="#ec6a6d" style={styles.inputIcons} />
+                        </Pressable>
+                    </View>
+                    <TextInput style={styles.inputTextInput} placeholder="Credits"
+                        value={`${credits}`}
+                        onChangeText={() => { }}
+                    />
+                </View>
+                <View style={styles.typeView}>
+                    <SelectList
+                        style={{borderWidth: 0, borderColor: 'transparent',}}
+                        setSelected={(val) => setType(val)}
+                        data={types}
+                        save="value"
+                        arrowicon={<Feather name="chevron-down" size={24} color="#ec6a6d" style={styles.inputIcons} />}
+                    />
+                </View>
                 <View style={styles.uploadImageView}>
                     {
                         !image
@@ -246,6 +281,7 @@ export default function NewEvent({
                 </View>
             </Pressable>
         </View>
+        </ScrollView>
     );
 }
 
@@ -291,17 +327,30 @@ const styles = StyleSheet.create({
     centralView: {
         display: "flex",
         flexDirection: "column",
-        height: '60%',
+        height: 650,
         width: 350,
         marginTop: 5,
-        borderRadius: 40,
+        borderRadius: 20,
         backgroundColor: "#d6e8ff",
     },
     inputView: {
         display: "flex",
-        flexDirection: "row",
+        flexDirection: "row-reverse",
         alignItems: "center",
         backgroundColor: "#FFF",
+        marginTop: 20,
+        marginBottom: 10,
+        marginHorizontal: 20,
+        height: 50,
+        width: '90%',
+        borderRadius: 15,
+
+    },
+    creditsInputView: {
+        display: "flex",
+        flexDirection: "row-reverse",
+        justifyContent: "center",
+        alignItems: "center",
         marginTop: 20,
         marginBottom: 10,
         marginHorizontal: 20,
@@ -333,8 +382,27 @@ const styles = StyleSheet.create({
         height: 40,
         fontSize: 15
     },
+    typeView: {
+        display: "flex",
+        backgroundColor: "#FFF",
+        marginTop: 20,
+        marginBottom: 10,
+        marginHorizontal: 20,
+        height: 50,
+        width: '90%',
+        borderRadius: 15,
+    },
+    
+    inputType: {
+        flex: 1,
+        width: '100%',
+        paddingHorizontal: 10,
+        borderWidth: 0,          // Add this line
+        borderColor: 'transparent', 
+    },
     signInPressable: {
         marginTop: 50,
+        marginBottom:  50,
         backgroundColor: "#ec6a6d",
         height: 40,
         width: "90%",
@@ -366,7 +434,7 @@ const styles = StyleSheet.create({
     uploadImageView: {
         backgroundColor: '#fff',
         width: '90%',
-        height: '40%',
+        height: '20%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
