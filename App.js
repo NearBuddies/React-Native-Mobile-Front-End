@@ -7,6 +7,7 @@ import AuthenticationNavigation from './Components/Authentication/Authentication
 import UserNavigation from './Components/User/UserNavigation';
 import UserStack from './Components/User/UserStack';
 import NewEvent from './Components/Event/NewEvent';
+import EventDetails from './Components/Event/EventDetails';
 import { authenticate } from './Components/Authentication/Services/AuthenticationService';
 import { MyTheme } from './Variables';
 
@@ -61,8 +62,8 @@ const App = () => {
     <NavigationContainer theme={MyTheme}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen
-              name="NewEvent"
-              component={NewEvent}
+              name="EventDetails"
+              component={EventDetails}
             />
       </Stack.Navigator>
     </NavigationContainer>
