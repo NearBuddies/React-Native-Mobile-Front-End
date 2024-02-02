@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#fff', // Set your desired background color
+        backgroundColor: '#fff',
     },
     RegisterPressable: {
         backgroundColor: "#ec6a6d",

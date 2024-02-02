@@ -6,6 +6,7 @@ import Settings from '../Common/Settings';
 import UserMainPage from './UserMainPage';
 import UserExplore from './UserExplore';
 import UserForYou from './UserForYou';
+import { Feather } from '@expo/vector-icons'
 export default function UserNavigation(){
     const Tab = createBottomTabNavigator();
     return(
@@ -17,8 +18,7 @@ export default function UserNavigation(){
               component={UserMainPage}
               options={{
                 tabBarIcon: () => (
-                  <Image source={require('../../assets/icons/house.png')}
-                    style={{ width: 20, height: 20 }} />
+                  <Feather name="home" size={24} color="#ec6a6d"/>
                 )
               }} />
             <Tab.Screen
@@ -26,8 +26,7 @@ export default function UserNavigation(){
               component={UserForYou}
               options={{
                 tabBarIcon: () => (
-                  <Image source={require('../../assets/icons/for-you.png')}
-                    style={{ width: 20, height: 20 }} />
+                  <Feather name="heart" size={24} color="#ec6a6d"/>
                 )
               }} />
             <Tab.Screen
@@ -35,8 +34,7 @@ export default function UserNavigation(){
               component={UserExplore}
               options={{
                 tabBarIcon: () => (
-                  <Image source={require('../../assets/icons/compass.png')}
-                    style={{ width: 20, height: 20 }} />
+                  <Feather name="compass" size={24} color="#ec6a6d"/>
                 )
               }} />
             <Tab.Screen
@@ -44,8 +42,7 @@ export default function UserNavigation(){
               component={Settings}
               options={{
                 tabBarIcon: () => (
-                  <Image source={require('../../assets/icons/tools.png')}
-                    style={{ width: 20, height: 20 }} />
+                  <Feather name="settings" size={24} color="#ec6a6d"/>
                 )
               }} />
           </Tab.Navigator>

@@ -12,11 +12,21 @@ import { GOOGLE_MAPS_APIKEY } from '../../Variables';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { SelectList } from 'react-native-dropdown-select-list'
 import { ScrollView } from 'react-native';
+import { createEvent } from './Services/EventService';
 export default function NewEvent({
 
 }) {
-
+    const route = useRoute()
+    // L'id de la communauté
+    const community_id = route.params
     const navigation = useNavigation();
+    // use create event and navigate
+    const createEventAndNavigate = () => {
+        createEvent(community_id, name, description, image, selectedDate, locationAddress, credits);
+        navigation.navigate("UserCommunityPage", community_id);
+    }
+    const [name, setName] = React.useState("");
+    const [description, setDescription] = React.useState("");
     const [image, setImage] = useState(null);
     const [isModalVisible, setModalVisible] = useState(false);
     const [locationAddress, setLocationAddress] = useState('');
@@ -154,13 +164,13 @@ export default function NewEvent({
                     <Pressable>
                         <Feather name="type" size={24} color="#ec6a6d" style={styles.inputIcons} />
                     </Pressable>
-                    <TextInput style={styles.inputTextInput} placeholder="Title" />
+                    <TextInput style={styles.inputTextInput} placeholder="Title" onChangeText={(text)=>setName(text)}/>
                 </View>
                 <View style={styles.inputView}>
                     <Pressable>
                         <Feather name="align-justify" size={24} color="#ec6a6d" style={styles.inputIcons} />
                     </Pressable>
-                    <TextInput style={styles.inputTextInput} placeholder="Description" />
+                    <TextInput style={styles.inputTextInput} placeholder="Description"  onChangeText={(text)=>setDescription(text)}/>
                 </View>
                 <View style={styles.inputView}>
                     <Pressable onPress={toggleModal}>
@@ -275,7 +285,7 @@ export default function NewEvent({
                 </View>
             </View>
 
-            <Pressable style={styles.signInPressable} onPress={() => { Alert.alert("You pressed") }}>
+            <Pressable style={styles.signInPressable} onPress={() => { createEventAndNavigate() }}>
                 <View >
                     <Text style={styles.signInButtonStyle}>Create Event</Text>
                 </View>
