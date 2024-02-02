@@ -7,7 +7,8 @@ import AuthenticationNavigation from './Components/Authentication/Authentication
 import UserNavigation from './Components/User/UserNavigation';
 import UserStack from './Components/User/UserStack';
 import NewEvent from './Components/Event/NewEvent';
-import EventDetails from './Components/Event/EventDetails';
+import AddCreditsPage from './Components/Event/addCredits';
+import {CreditsConverterPage} from './Components/Event/CreditsConverterPage';
 import { authenticate } from './Components/Authentication/Services/AuthenticationService';
 import { MyTheme } from './Variables';
 
@@ -22,8 +23,8 @@ const App = () => {
         // Get the username and the password
         const username = await AsyncStorage.getItem("username");
         const password = await AsyncStorage.getItem("password");
-        const authenticateBool = await authenticate(username,password)
-        if (authenticateBool){
+
+        if ( authenticate(username,password) ){
           // Set userAuthenticated to true
           setUserAuthenticated(true);
         } else {
@@ -58,6 +59,17 @@ const App = () => {
       </Stack.Navigator>
     </NavigationContainer>
   );
+  /*return (
+    <NavigationContainer theme={MyTheme}>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen
+              name="AddCreditsPage"
+              component={AddCreditsPage}
+            />
+            <Stack.Screen name='CreditsConverterPage' component={CreditsConverterPage} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );*/
 };
 
 const styles = StyleSheet.create({

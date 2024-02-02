@@ -1,5 +1,5 @@
 // The root address of the application
-const rootAddress = 'http://192.168.0.23:8080' // Everytime you change wifi
+const rootAddress = 'http://192.168.10.5:8080' // Everytime you change wifi
 // The root address of the spatial database
 const spatial_db_rootAddress = 'http://192.168.0.23:3000' // Everytime you change wifi
 // Google Cloud maps service api key 
