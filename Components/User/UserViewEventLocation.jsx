@@ -9,9 +9,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { rootAddress } from '../../Variables';
 import { GOOGLE_MAPS_APIKEY } from '../../Variables';
+import { getDistance, getPreciseDistance } from 'geolib';
+import { findEventLocation } from '../Event/Services/EventService';
 import CustomAppBar from '../Common/CustomAppBar';
 
 function UserViewEventLocation({ route }) {
+    const event_id = route.params
     
     console.log("Route params are :" + JSON.stringify(route.params));
     
@@ -25,8 +28,8 @@ function UserViewEventLocation({ route }) {
 
     // Get Event position 
     const [EventPosition, setEventPosition] = useState({
-        latitude: 33.0000124,
-        longitude: -7.001114,
+        latitude: 0,
+        longitude: 0,
     });
 
     // Get the distance between them
@@ -87,14 +90,7 @@ function UserViewEventLocation({ route }) {
             const newLongitude = location.coords.longitude;
             setUserPosition({ latitude: newLatitude, longitude: newLongitude });
             console.log("I'm emitting")
-            /*socket.emit('postcitizenlocation', {
-                entity_id: 1,
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
-            });
-            socket.once('postcitizenlocation', (response) => {
-                console.log("User current stored location identifier is "+response.locationidentifier);
-            });*/
+
             }
         );
         };
@@ -102,6 +98,18 @@ function UserViewEventLocation({ route }) {
         // Cleanup function
         return () => {};
     }, []);
+
+  // At the page opening
+  useEffect( () => {
+    const fetchDatas = async () => {
+      requestLocationPermission() // Location permission
+      const the_event_position = await findEventLocation(event_id)
+      setEventPosition(the_event_position) // The position of event
+      const the_distance = getPreciseDistance(userPosition,the_event_position)
+      setDistance(the_distance) // The distance between user and event
+    }
+    fetchDatas()
+  }, []); 
 
 
   return (
@@ -237,8 +245,6 @@ sendButtonText: {
 mapChargingText : {
   fontSize: 15,
   fontWeight : 'bold',
-  fontFamily : 'italic',
-  fontStyle : 'italic'
 },
 showDistanceView : {
   position : 'absolute',

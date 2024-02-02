@@ -6,6 +6,7 @@ import UserCreateCommunity from './UserCreateCommunity';
 import UserSeeCommunityPage from './UserSeeCommunityPage';
 import UserCommunityPage from './UserCommunityPage';
 import UserViewCommunityLocation from './UserViewCommunityLocation';
+import UserViewEventLocation from './UserViewEventLocation'
 import NewEvent from '../Event/NewEvent';
 import EventDetails from '../Event/EventDetails';
 import {CreditsConverterPage} from '../Event/CreditsConverterPage';
@@ -20,7 +21,9 @@ export default function UserStack() {
             <Stack.Screen name='UserSeeCommunityPage' component={UserSeeCommunityPage} />
             <Stack.Screen name='UserCommunityPage' component={UserCommunityPage} />
             <Stack.Screen name='UserViewCommunityLocation' component={UserViewCommunityLocation} />
+            <Stack.Screen name='UserViewEventLocation' component={UserViewEventLocation} />
             <Stack.Screen name='NewEvent' component={NewEvent} />
+            <Stack.Screen name='EventDetails' component={EventDetails} />
             <Stack.Screen name='AddCreditsPage' component={AddCreditsPage} />
             <Stack.Screen name='CreditsConverterPage' component={CreditsConverterPage} />
         </Stack.Navigator>

@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-class UserForYou extends Component {
-    render() {
+const UserForYou = () => {
+
         return (
             <View style={styles.container}>
                 <Text>UserExplore</Text>
             </View>
         );
-    }
+    
 }
 
 const styles = StyleSheet.create({

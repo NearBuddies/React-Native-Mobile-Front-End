@@ -135,10 +135,10 @@ const findEventLocation = async (event_id) => {
 // Join an event
 const joinEvent = async (eventId) => {
     const user_id = await AsyncStorage.getItem("user_id")
-    console.log("L'id envoyé est " + user_id)
+    console.log("L'id envoyé est " + user_id + " et l'event id est "+eventId)
     try {
         const response = await axios.post(`${rootAddress}/event/register/${user_id}/${eventId}/GENERAL/CONFIRMED`)
-        if (response.data) {
+        if (response.ok) {
             console.log('événement rejoint avec succès')
             return 'JUST_JOINED'
         }
@@ -151,16 +151,16 @@ const joinEvent = async (eventId) => {
 // Quit an event
 const quitEvent = async (eventId) => {
     const user_id = await AsyncStorage.getItem("user_id")
-    console.log("L'id envoyé est " + user_id)
+    console.log("L'id envoyé est " + user_id + "et l'event id est "+eventId)
     try {
         const response = await axios.post(`${rootAddress}/event/cancel/${user_id}/${eventId}`)
-        if (response.data) {
+        if (response.ok) {
             console.log('utilisateur est retirée')
-            return 'JUST_JOINED'
+            return 'JUST_QUITTED'
         }
     } catch (err) {
-        console.log("Deja dans l'événement " + err)
-        return 'ALREADY_IN'
+        console.log("Deja hors l'événement " + err)
+        return 'ALREADY_QUITTED'
     }
 }
 

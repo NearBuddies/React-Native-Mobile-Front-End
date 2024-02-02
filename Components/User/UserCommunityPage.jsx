@@ -57,8 +57,8 @@ export default function UserCommunityPage() {
             const the_community = await findCommunity(community_id)
             // This work fine, console.log("The community is "+JSON.stringify(the_community,null,2))
             setTheCommunity(theCommunity)
-            const the_events = await getEventsofCommunity(community_id);
-
+            console.log("Community id is : "+community_id)
+            const the_events = await getEventsofCommunity(community_id)
             setEvents(the_events);
         }
         fetchDatas()

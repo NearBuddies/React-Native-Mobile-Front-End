@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Pressable, StyleSheet, Text, View, TextInput, Image, Alert, TouchableOpacity, Dimensions, } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons'
 import MapView, { Marker, Circle, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';

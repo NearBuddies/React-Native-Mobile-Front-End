@@ -22,11 +22,11 @@ export default function UserNavigation(){
                 )
               }} />
             <Tab.Screen
-              name="For You"
+              name="Buy credits"
               component={UserForYou}
               options={{
                 tabBarIcon: () => (
-                  <Feather name="heart" size={24} color="#ec6a6d"/>
+                  <Feather name="dollar-bill" size={24} color="#ec6a6d"/>
                 )
               }} />
             <Tab.Screen
