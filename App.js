@@ -6,13 +6,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthenticationNavigation from './Components/Authentication/AuthenticationNavigation';
 import UserNavigation from './Components/User/UserNavigation';
 import UserStack from './Components/User/UserStack';
+import NewEvent from './Components/Event/NewEvent';
+import EventDetails from './Components/Event/EventDetails';
 import { authenticate } from './Components/Authentication/Services/AuthenticationService';
 import { MyTheme } from './Variables';
 
 const Stack = createStackNavigator();
 
 const App = () => {
-  const [userAuthenticated, setUserAuthenticated] = useState(false);
+  /*const [userAuthenticated, setUserAuthenticated] = useState(false);
 
   useEffect(() => {
     const authenticateUser = async () => {
@@ -53,6 +55,16 @@ const App = () => {
             />
           </>
         )}
+      </Stack.Navigator>
+    </NavigationContainer>
+  );*/
+  return (
+    <NavigationContainer theme={MyTheme}>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen
+              name="EventDetails"
+              component={EventDetails}
+            />
       </Stack.Navigator>
     </NavigationContainer>
   );
