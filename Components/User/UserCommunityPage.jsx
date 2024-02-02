@@ -28,7 +28,10 @@ export default function UserCommunityPage () {
             setTheCommunity(theCommunity)
             /********************************************* PUT THE EVENTS RETRIEVING HERE************************************************************/ 
             
-            
+            // Get the events by community
+
+
+            // setEvents(something)
         }
 
         fetchDatas()
