@@ -50,18 +50,16 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start',
-        backgroundColor: '#ec6a6d',
+        backgroundColor: '#d6e8ff',
         borderRadius: 15,
-        margin: 10,
-        padding: 10,
-        elevation: 5,
-        width: '90%',
-        height: '80%',
+        marginVertical: 10,
+
     },
     detailContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 10,
+        display : 'flex'
     },
     icon: {
         marginRight: 5,
@@ -69,10 +67,12 @@ const styles = StyleSheet.create({
     detail: {
         fontWeight: 'bold',
         fontSize: 18,
+        display : "flex"
     },
     eventCreatedText: {
         fontStyle: 'italic',
         fontSize: 18,
+        display : "flex"
     },
     posterImage: {
         width: '100%',
@@ -82,10 +82,12 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderWidth: 1,
         borderColor: '#ec6a6d',
+        display : "flex",
     },
     cardContent: {
         marginLeft: 10,
-        flex: 1,
+        display : "flex",
+        flexDirection : 'column'
     },
     eventName: {
         fontSize: 18,

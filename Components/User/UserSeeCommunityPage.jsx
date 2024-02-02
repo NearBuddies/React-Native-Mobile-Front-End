@@ -8,7 +8,6 @@ import { findCommunity, joinCommunity } from "../Common/Services/CommunityServic
 import { makeBase64Image } from "../Common/Services/ImagesService";
 
 export default function UserSeeCommunityPage() {
-    // On met une petite navigation
     const navigation = useNavigation()
     const route = useRoute()
     // Take id of community

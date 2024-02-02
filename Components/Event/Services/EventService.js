@@ -109,21 +109,6 @@ const findEventLocation = async (event_id) => {
     }
 };
 
-// Get Events in which user already is
-const getEventsOfUser = async () => {
-    // find user id
-    const user_id = await AsyncStorage.getItem("user_id")
-    console.log("L'id envoyé est " + user_id)
-    try {
-        const response = await axios.get(`${rootAddress}/event/findEventsOfUser/${user_id}`)
-        if(response.data) {
-            return response.data
-        }
-    } catch (err) {
-        console.log("Erreur dans la recherche des événements "+ err)
-        throw err
-    }
-}   
 
 // Get the nearest Events of an user
 const getNearestEventsToUser = async () => {
@@ -160,7 +145,29 @@ const joinEvent = async (eventId) => {
     const user_id = await AsyncStorage.getItem("user_id")
     console.log("L'id envoyé est " + user_id)
     try {
+        /********************************************************FIX THE ENDPOINT*******************************************************************/
         const response = await axios.post(`${rootAddress}/event/join/${user_id}/${eventId}`)
+        if(response.data) {
+            console.log('événement rejoint avec succès')
+            // FIND THE CREATOR ID
+            // const creator_id = response.data. ...... something........
+            const anotherResponse = await axios.post(`${rootAddress}/user/addCredit/${creator_id}`) // add creator credits
+            return 'JUST_JOINED'
+        }
+    } catch (err) {
+        console.log("Deja dans l'événement "+ err)
+        return 'ALREADY_IN'
+    }
+}
+
+// Quit an event
+const quitEvent = async (eventId) => {
+    const user_id = await AsyncStorage.getItem("user_id")
+    console.log("L'id envoyé est " + user_id)
+    try {
+
+        /********************************************************FIX THE ENDPOINT*******************************************************************/
+        const response = await axios.post(`${rootAddress}/event/quit/${user_id}/${eventId}`)
         if(response.data) {
             console.log('événement rejoint avec succès')
             return 'JUST_JOINED'
@@ -176,8 +183,7 @@ export {
     findEvent,
     findEventLocation,
     getCurrentLatitudeAndLongitude,
-    getEventsOfUser,
-    getNearestEventsToUser,
     createEvent,
-    joinEvent
+    joinEvent,
+    quitEvent
 }
