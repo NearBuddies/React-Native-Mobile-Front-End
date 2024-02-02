@@ -141,16 +141,13 @@ const getNearestEventsToUser = async () => {
 }
 
 // Join an event
-const joinEvent = async (eventId) => {
+const joinEvent = async (eventId,type,status) => {
     const user_id = await AsyncStorage.getItem("user_id")
     console.log("L'id envoyé est " + user_id)
     try {
-        /********************************************************FIX THE ENDPOINT*******************************************************************/
-        const response = await axios.post(`${rootAddress}/event/join/${user_id}/${eventId}`)
+        const response = await axios.post(`${rootAddress}/event/register/${user_id}/${eventId}/${type}/${status}`)
         if(response.data) {
             console.log('événement rejoint avec succès')
-            // FIND THE CREATOR ID
-            // const creator_id = response.data. ...... something........
             const anotherResponse = await axios.post(`${rootAddress}/user/addCredit/${creator_id}`) // add creator credits
             return 'JUST_JOINED'
         }
