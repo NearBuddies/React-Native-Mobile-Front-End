@@ -30,7 +30,7 @@ function UserViewEventLocation({ route }) {
     });
 
     // Get the distance between them
-    const [distance, setDistance] = useState(1000);
+    const [distance, setDistance] = useState(0);
 
     
     const [isPermissionRequested, setIsPermissionRequested] = useState(false);

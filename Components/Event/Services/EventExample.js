@@ -1,9 +1,4 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import EventCard from './EventCard'; // Make sure to adjust the import path based on your project structure
-
-const EventDetails = () => {
-    const event = {
+const event = {
     "id": "65bbb7e5baf9353dce1da685",
     "name": "Book exchange",
     "description": "Let's share books!",
@@ -36,22 +31,8 @@ const EventDetails = () => {
     ],
     "ratings": [],
     "comments": []
-};
+}
 
-return (
-    <View style={styles.container}>
-        <EventCard event={event} />
-    </View>
-);
-};
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#f0f0f0',
-    },
-});
-
-export default EventDetails;
+export {
+    event
+}

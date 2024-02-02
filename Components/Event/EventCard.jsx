@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start',
-        backgroundColor: '#fff',
+        backgroundColor: '#ec6a6d',
         borderRadius: 15,
         margin: 10,
         padding: 10,

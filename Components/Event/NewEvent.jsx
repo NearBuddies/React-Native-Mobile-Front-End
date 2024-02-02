@@ -242,7 +242,7 @@ export default function NewEvent({
                         </Pressable>
                     </View>
                     <TextInput style={styles.inputTextInput} placeholder="Credits"
-                        value={`${credits}`}
+                        value={`${credits} COINS`}
                         onChangeText={() => { }}
                     />
                 </View>

@@ -14,7 +14,7 @@ import { MyTheme } from './Variables';
 const Stack = createStackNavigator();
 
 const App = () => {
-  /*const [userAuthenticated, setUserAuthenticated] = useState(false);
+  const [userAuthenticated, setUserAuthenticated] = useState(false);
 
   useEffect(() => {
     const authenticateUser = async () => {
@@ -55,16 +55,6 @@ const App = () => {
             />
           </>
         )}
-      </Stack.Navigator>
-    </NavigationContainer>
-  );*/
-  return (
-    <NavigationContainer theme={MyTheme}>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen
-              name="EventDetails"
-              component={EventDetails}
-            />
       </Stack.Navigator>
     </NavigationContainer>
   );
