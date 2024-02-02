@@ -26,7 +26,7 @@ export default function UserNavigation(){
               component={UserForYou}
               options={{
                 tabBarIcon: () => (
-                  <Feather name="dollar-bill" size={24} color="#ec6a6d"/>
+                  <Feather name="dollar-sign" size={24} color="#ec6a6d"/>
                 )
               }} />
             <Tab.Screen
