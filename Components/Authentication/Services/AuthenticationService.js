@@ -16,6 +16,8 @@ const authenticate = async (username, password) => {
             AsyncStorage.setItem("username", response.data.username);
             AsyncStorage.setItem("password", response.data.password);
             AsyncStorage.setItem("user_id", response.data.id);
+            //UPDATE ASYNC STORAGE
+            AsyncStorage.setItem('credits', response.data.credits.toString());
             return true;
         }
     } catch (error) {
