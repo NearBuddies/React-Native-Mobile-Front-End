@@ -6,6 +6,7 @@ import Settings from '../Common/Settings';
 import UserMainPage from './UserMainPage';
 import UserExplore from './UserExplore';
 import UserForYou from './UserForYou';
+import CreditsConverterPage  from '../Event/CreditsConverterPage';
 import { Feather } from '@expo/vector-icons'
 export default function UserNavigation(){
     const Tab = createBottomTabNavigator();
@@ -23,7 +24,7 @@ export default function UserNavigation(){
               }} />
             <Tab.Screen
               name="Buy credits"
-              component={UserForYou}
+              component={CreditsConverterPage}
               options={{
                 tabBarIcon: () => (
                   <Feather name="dollar-sign" size={24} color="#ec6a6d"/>

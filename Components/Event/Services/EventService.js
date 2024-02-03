@@ -104,14 +104,14 @@ const findEvent = async (event_id) => {
 // Get events in which are created in community
 const getEventsofCommunity = async (community_id) => {
     try {
-        const response = await axios.get(`${rootAddress}/event/communityEvents/${community_id}`)
+       const response = await axios.get(`${rootAddress}/event/communityEvents/${community_id}`)
         if (response.data) {
             return response.data
         }
     } catch (err) {
         console.log("Erreur dans la recherche des communautés " + err)
         throw err
-    }
+    } 
 }
 
 // Find location of an event
@@ -140,6 +140,11 @@ const joinEvent = async (eventId) => {
         const response = await axios.post(`${rootAddress}/event/register/${user_id}/${eventId}/GENERAL/CONFIRMED`)
         if (response.ok) {
             console.log('événement rejoint avec succès')
+            //UPDATE ASYNC STORAGE
+            const user = response.data;
+            if (user) {
+                await AsyncStorage.setItem('credits', user.credits.toString());
+              }
             return 'JUST_JOINED'
         }
     } catch (err) {

@@ -9,7 +9,7 @@ import UserViewCommunityLocation from './UserViewCommunityLocation';
 import UserViewEventLocation from './UserViewEventLocation'
 import NewEvent from '../Event/NewEvent';
 import EventDetails from '../Event/EventDetails';
-import {CreditsConverterPage} from '../Event/CreditsConverterPage';
+import CreditsConverterPage from '../Event/CreditsConverterPage';
 import AddCreditsPage from '../Event/addCredits';
 
 export default function UserStack() {
