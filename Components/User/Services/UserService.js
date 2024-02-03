@@ -33,11 +33,11 @@ const getLatestUserLocation = async (user_id) => {
 }
 
 const addCredits = async (user_id, credits) => {
-    console.log("-->user: " + user_id + " current credits: " + credits);
+    console.log("-->user: " + user_id + " to add credits: " + credits);
     try {
       const response = await axios.post(
         `${rootAddress}/auth/credits/add/${user_id}`,
-        null, // Since you are sending parameters in the URL, set data to null
+        null, 
         {
           params: {
             credits: credits,

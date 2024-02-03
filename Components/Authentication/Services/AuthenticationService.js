@@ -53,7 +53,24 @@ const register = async (username, password, email) => {
     }
 }
 
+const getCredits = async (username, password) => {
+    try {
+        const response = await axios.post(`${rootAddress}/auth/signin`, {
+            "username": username,
+            "password": password
+        });
+
+        if (response.data) {
+            const credits = response.data.credits.toString()
+            AsyncStorage.setItem('credits', response.data.credits.toString());
+            return credits
+        }
+    } catch (error) {
+        console.log(error);
+    }
+} 
 export {
     authenticate,
-    register
+    register,
+    getCredits
 }

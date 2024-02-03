@@ -65,7 +65,7 @@ export default function InscriptionPage({
                         style = {styles.inputIcons}
                         />
                     </Pressable>
-                    <TextInput style={styles.inputTextInput} placeholder="Password" onChangeText={(text)=>{setPassword(text)}}/>
+                    <TextInput style={styles.inputTextInput} placeholder="Password" secureTextEntry={true} onChangeText={(text)=>{setPassword(text)}}/>
                     <Pressable style={styles.inputPressableEnd} onPress={()=> Alert.alert("You pressed")}>
                         <Image
                         source={require("../../assets/icons/auth/View_light.jpg")}
@@ -80,7 +80,7 @@ export default function InscriptionPage({
                         style = {styles.inputIcons}
                         />
                     </Pressable>
-                    <TextInput style={styles.inputTextInput} placeholder="Confirm password" onChangeText={(text)=>{setConfirmedPassword(text)}}/>
+                    <TextInput style={styles.inputTextInput} placeholder="Confirm password" secureTextEntry={true} onChangeText={(text)=>{setConfirmedPassword(text)}}/>
                     <Pressable style={styles.inputPressableEnd} onPress={()=> Alert.alert("You pressed")}>
                         <Image
                         source={require("../../assets/icons/auth/View_light.jpg")}
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
         width : 350,
         marginTop : 50,
         borderRadius: 40, 
-        backgroundColor : "#A6DACD",
+        backgroundColor : "#deff",
     },
     inputView : {
         display : "flex",

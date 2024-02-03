@@ -1,13 +1,13 @@
 //import liraries
 import React, { useEffect, useState } from 'react';
 import { View,SafeAreaView, TextInput, Text, StyleSheet, ScrollView, Touchable, TouchableOpacity, FlatList, Image, Pressable } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { makeBase64Image } from '../Common/Services/ImagesService';
 import { getNearestCommunitiesToUser, getCommunitiesOfUser } from '../Common/Services/CommunityService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Feather } from '@expo/vector-icons';
 // create a component
 export default function UserMainPage() {
-    
     // Se mettre une navigation
     const navigation = useNavigation();
     // Les communautés dans lesquelles je suis
@@ -39,28 +39,46 @@ export default function UserMainPage() {
         imageUrl : require('../../assets/images/peche.jpg')
     }) 
 
+    const fetchCommunities = async () => { 
+        try {
+            // console.log("In use effect");
+            const theNearestCommunities = await getNearestCommunitiesToUser();
+            // console.log("Nearest communities " + JSON.stringify(theNearestCommunities));
+            setNearestCommunities(theNearestCommunities); // Set nearest communities
+            // console.log("The nearest communities " + JSON.stringify(nearestCommunities));
+            const userCommunities = await getCommunitiesOfUser();
+            setMyCommunities(userCommunities); // Set user communities
+        } catch (error) {
+            console.error("Error while fetching nearest communities:", error);
+        }
+    };
  
     useEffect(() => {
-        const fetchCommunities = async () => { 
-            try {
-                // console.log("In use effect");
-                const theNearestCommunities = await getNearestCommunitiesToUser();
-                // console.log("Nearest communities " + JSON.stringify(theNearestCommunities));
-                setNearestCommunities(theNearestCommunities); // Set nearest communities
-                // console.log("The nearest communities " + JSON.stringify(nearestCommunities));
-                const userCommunities = await getCommunitiesOfUser();
-                setMyCommunities(userCommunities); // Set user communities
-            } catch (error) {
-                console.error("Error while fetching nearest communities:", error);
-            }
-        };
+        
         fetchCommunities()
         // console.log("myCommunities is" + JSON.stringify(myCommunities,null,2) )
     }, []);
 
+    // Use useFocusEffect to refetch data when the screen comes into focus
+  useFocusEffect(
+    React.useCallback(() => {
+        fetchCommunities()
+    }, [])
+  );
+
     return ( 
         <SafeAreaView style={styles.container}> 
-            <TextInput style={styles.TextInput}/>
+            
+
+
+            <View >
+                    <Pressable>
+                        <TextInput style={styles.TextInput} placeholder='What are you thinking about?'/>
+                        <Feather name="search" size={24} color="#ec6a6d" style={styles.textInputFeather}/>
+                    </Pressable>
+            </View> 
+
+
             <View>
                 <ScrollView
                 horizontal={true}
@@ -93,6 +111,7 @@ export default function UserMainPage() {
                     <TouchableOpacity 
                     style = {styles.myCommunitiesViews}
                     onPress={()=>{navigateToCommunityPage(item.id)}}>
+                        <Text>{item.name}</Text>
                         <Image 
                         source = {{ uri: makeBase64Image(item.profilPhoto) }}  // typeof item.imageUrl==='string' ? {uri : item.imageUrl} : item.imageUrl
                         style = {styles.topImagesStyle}
@@ -117,6 +136,7 @@ export default function UserMainPage() {
                     <TouchableOpacity
                         style={styles.nearestCommunitiesViewsStyle}
                         onPress={() => navigateToSeeCommunityPage(item.id)}>
+                            <Text>{item.name}</Text>
                         <Image source={{ uri: makeBase64Image(item.profilPhoto)}} style={styles.bottomImagesStyle} />
                     </TouchableOpacity>
                     )}
@@ -144,9 +164,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',     
     },
     TextInput : {
+        display : 'flex',
         backgroundColor : '#D2E9FE',
         height : 50,
         borderRadius : 20,
+        paddingLeft : 40
+    },
+    textInputFeather : {
+        position : "absolute",
+        top : "27%",
+        left : "2%"
     },
     textStyle : {
         fontSize : 20

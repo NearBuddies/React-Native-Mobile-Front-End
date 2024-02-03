@@ -109,7 +109,7 @@ function UserViewEventLocation({ route }) {
       setDistance(the_distance) // The distance between user and event
     }
     fetchDatas()
-  }, []); 
+  }, []); //userPosition
 
 
   return (

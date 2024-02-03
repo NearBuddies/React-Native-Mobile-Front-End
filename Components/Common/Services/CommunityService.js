@@ -66,9 +66,11 @@ const createCommunity = async (name, description, photo) => {
     })
     if (response) {
         // console.log('Create community returned', response.data);
+    const com_id = response.data.id
     const { latitude, longitude } = await getCurrentLatitudeAndLongitude()
     const anotherResponse = await saveCommunityLocation(response.data.id, latitude, longitude)
     if (anotherResponse) {
+        const join = await joinCommunity(com_id)
         console.log('Successfully created community and saved its location')
     }
     return response.data.id

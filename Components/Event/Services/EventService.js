@@ -161,10 +161,15 @@ const quitEvent = async (eventId) => {
         const response = await axios.post(`${rootAddress}/event/cancel/${user_id}/${eventId}`)
         if (response.ok) {
             console.log('utilisateur est retirée')
+            //UPDATE ASYNC STORAGE
+            const user = response.data;
+            if (user) {
+                await AsyncStorage.setItem('credits', user.credits.toString());
+              }
             return 'JUST_QUITTED'
         }
     } catch (err) {
-        console.log("Deja hors l'événement " + err)
+        console.log("Deja hors l'événement "     + err)
         return 'ALREADY_QUITTED'
     }
 }

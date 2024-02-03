@@ -4,6 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { addCredits } from '../User/Services/UserService';
+import { getCredits } from '../Authentication/Services/AuthenticationService';
 
 const CreditsConverterPage = ({ navigation }) => {
   const [dollars, setDollars] = useState('');
@@ -17,12 +18,29 @@ const CreditsConverterPage = ({ navigation }) => {
     { date: '2024-03-03', amount: 10.00, motif: 'Subscription' },
   ];
 
+  const useGetCredits = async () => {
+    try {
+      // Get the username and the password
+      const username = await AsyncStorage.getItem("username");
+      const password = await AsyncStorage.getItem("password");
+      const the_credits = await getCredits(username,password)
+    } catch (error) {
+      console.error("Error authenticating user:", error);
+    }
+  };
+
   const fetchData = async () => {
     try {
       const user_id = await AsyncStorage.getItem('user_id');
-      const credits = await AsyncStorage.getItem('credits');
+      // Get the username and the password
+      const username = await AsyncStorage.getItem("username");
+      const password = await AsyncStorage.getItem("password");
+      
+      const the_credits = await getCredits(username,password)
+
+      // const credits = await AsyncStorage.getItem('credits');
       setUser_id(user_id);
-      setCurrentCredits(parseFloat(credits) || 0);
+      setCurrentCredits(parseFloat(the_credits) || 0);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -52,6 +70,7 @@ const CreditsConverterPage = ({ navigation }) => {
 
   const addCreditsandRefresh = async () => {
     try {
+      const user_id = await AsyncStorage.getItem('user_id');
       const user = await addCredits(user_id, credits);
       await fetchData();
 
